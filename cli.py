@@ -84,12 +84,12 @@ class PatientVitals:
     heart_strength: str = HEART_STRENGTH.STRONG.value
     heart_rhythm: str = HEART_RHYTHM.REGULAR.value
     respiratory_rate: int = RESPIRATORY_RATE.NORMAL.value
-    respiratory_rhythm: int = RESPIRATORY_RHYTHM.REGULAR.value
-    respiratory_effort: int = RESPIRATORY_EFFORT.UNLABORED.value
+    respiratory_rhythm: str = RESPIRATORY_RHYTHM.REGULAR.value
+    respiratory_effort: str = RESPIRATORY_EFFORT.UNLABORED.value
     skin_color: str = SKIN_COLOR.PINK.value
     skin_temperature: str = SKIN_TEMPERATURE.WARM.value
     skin_moisture: str = SKIN_MOISTURE.DRY.value
-    temperature = TEMPERATURE.NORMAL.value
+    temperature: float = TEMPERATURE.NORMAL.value
     pupils: str = PUPILS.PERRL.value
     blood_pressure: str = BLOOD_PRESSURE.NORMAL.value
 
