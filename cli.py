@@ -96,7 +96,7 @@ class PatientVitals:
 
 def main():
     # pick a condition
-    with open("conditions3.json", "r") as f:
+    with open("wfr_conditions.json", "r") as f:
         data = json.load(f)
     condition = random.choice(data)
     

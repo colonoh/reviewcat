@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Angina",
+    "description": "Pain from diminished blood flow to the heart.",
+    "symptoms": [
+      {
+        "name": "Nausea"
+      },
+      {
+        "name": "Discomfort in the neck"
+      },
+      {
+        "name": "Discomfort in the jaw"
+      },
+      {
+        "name": "Discomfort in the teeth"
+      },
+      {
+        "name": "Discomfort in the back"
+      },
+      {
+        "name": "Shortness of breath"
+      },
+      {
+        "name": "Stabbing pain"
+      },
+      {
+        "name": "Stomach (abdominal) pain"
+      },
+      {
+        "name": "Rapid pulse",
+        "vitals": [
+          [
+            "HEART_RATE_RAPID"
+          ]
+        ]
+      },
+      {
+        "name": "Slow pulse",
+        "vitals": [
+          [
+            "HEART_RATE_SLOW"
+          ]
+        ]
+      },
+      {
+        "name": "Weak pulse",
+        "vitals": [
+          [
+            "HEART_STRENGTH_WEAK"
+          ]
+        ]
+      },
+      {
+        "name": "Irregular pulse",
+        "vitals": [
+          [
+            "HEART_RHYTHM_IRREGULAR"
+          ]
+        ]
+      },
+      {
+        "name": "Pale, cool, clammy skin",
+        "vitals": [
+          [
+            "SKIN_COLOR_PALE",
+            "SKIN_TEMPERATURE_COOL",
+            "SKIN_MOISTURE_CLAMMY"
+          ]
+        ]
+      }
+    ],
+    "treatments": [
+      "Reduce anxiety and activity",
+      "Administer oxygen",
+      "Administer aspirin",
+      "Evacuate"
+    ],
+    "evacuation_guidelines": [
+      "Evacuate any patient with chest pain that is not clearly musculoskeletal, pulmonary, or gastrointestinal.",
+      "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."
+    ]
+  },
+  {
+    "name": "Heart attack (myocardial infarction)",
+    "sex": "Female",
+    "description": "Heart muscle damage from blocked blood flow.",
+    "symptoms": [
+      {
+        "name": "Discomfort in the neck"
+      },
+      {
+        "name": "Discomfort in the back"
+      },
+      {
+        "name": "Discomfort in the shoulders"
+      },
+      {
+        "name": "Discomfort in the jaw"
+      },
+      {
+        "name": "Shortness of breath"
+      },
+      {
+        "name": "Stomach pain or heartburn"
+      },
+      {
+        "name": "Pain in the left arm"
+      },
+      {
+        "name": "Pain in the right arm"
+      },
+      {
+        "name": "Nausea"
+      },
+      {
+        "name": "Vomiting"
+      },
+      {
+        "name": "Dizziness"
+      },
+      {
+        "name": "Fainting"
+      },
+      {
+        "name": "Unusual or unexplained fatigue, possibly for days"
+      }
+    ],
+    "treatments": [
+      "Reduce anxiety and activity",
+      "Administer oxygen",
+      "Administer aspirin (1 adult aspirin every 24 hours)"
+    ],
+    "evacuation_guidelines": [
+      "Expedited evacuation"
+    ]
+  },
+  {
+    "name": "Shock (early stage)",
+    "description": "The inadequate perfusion of tissue with oxygenated blood, due to a failure of any or all of three basic components of the circulatory system - heart, blood vessels, and blood - to deliver oxygenated blood to the tissues.",
+    "symptoms": [
+     {
+        "name": "Rapid pulse",
+        "vitals": [
+          [
+            "HEART_RATE_RAPID"
+          ]
+        ]
+      },
+      {
+        "name": "Weak pulse",
+        "vitals": [
+          [
+            "HEART_STRENGTH_WEAK"
+          ]
+        ]
+      },
+      {
+        "name": "Rapid respirations",
+        "vitals": [
+          [
+            "RESPIRATORY_RATE_RAPID"
+          ]
+        ]
+      },
+      {
+        "name": "Shallow respirations",
+        "vitals": [
+          [
+            "RESPIRATORY_EFFORT_SHALLOW"
+          ]
+        ]
+      },
+      {
+        "name": "Pale, cool, clammy skin",
+        "vitals": [
+          [
+            "SKIN_COLOR_PALE",
+            "SKIN_TEMPERATURE_COOL",
+            "SKIN_MOISTURE_CLAMMY"
+          ]
+        ]
+      },
+      {
+        "name": "Anxiety"
+      },
+      {
+        "name": "Restlessness"
+      },
+      {
+        "name": "Nausea"
+      },
+      {
+        "name": "Thirst"
+      }
+    ],
+    "treatments": [
+      "Maintain ABCs - airway, breathing, circulation",
+      "Control bleeding, stabilize fractures",
+      "Protect patient temperature within normal limits",
+      "Elevate the legs",
+      "Consider (giving) fluids"
+    ],
+    "evacuation_guidelines": [
+      "Evacuate any patient whose vital signs do not stabilize or improve over time.",
+      "Evacuate rapidly any patient with decreased mental status or deteriorating vital signs."
+    ]
+  },
+  {
+    "name": "Spinal cord injury",
+    "description": null,
+    "symptoms": [
+      {
+        "name": "Pain or tenderness on the spine"
+      },
+      {
+        "name": "Weakness in extremities"
+      },
+      {
+        "name": "Loss of sensation in extremities"
+      },
+      {
+        "name": "Numbness and tingling in hands and feet"
+      },
+      {
+        "name": "Incontinence"
+      },
+      {
+        "name": "Shortness of breath"
+      }
+    ],
+    "treatments": [
+      "Reduce anxiety and activity",
+      "Administer oxygen",
+      "Administer aspirin",
+      "Evacuate"
+    ],
+    "evacuation_guidelines": [
+      "TODO"
+    ]
+  }
+]
