@@ -5,6 +5,7 @@
 - [ ] add many more conditions
 - [ ] add references for conditions
 - [ ] add a frontend
+- [ ] present information as a SOAP note?
 - [ ] host the website
 - [ ] add potential backstory/events leading to?
 - [ ] add AI-generated patient picture/scene?
