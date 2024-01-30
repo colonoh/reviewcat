@@ -1,12 +1,81 @@
+from enum import Enum, IntEnum
 from random import randrange, sample
 from typing import List, Union
 
 from pydantic import BaseModel
 
-from constants import FREQUENCY, SEX, LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, \
-HEART_RHYTHM, RESPIRATORY_RATE, RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, \
-BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE
 
+class SEX(Enum):
+    ANY = "any"
+    FEMALE = "female"
+    MALE = "male"
+
+class FREQUENCY(IntEnum):  # perecent, where 100 = 100%
+    RARELY: float = 20
+    SOMETIMES: float = 50
+    OFTEN: float = 80
+    DEFAULT: float = 90
+    ALWAYS: float = 100
+
+class LEVEL_OF_RESPONSIVENESS(Enum):
+    AOx4 = "A&Ox4"
+    AOx3 = "A&Ox3"
+    AOx2 = "A&Ox2"
+    AOx1 = "A&Ox1"
+    # TODO: V, P, U
+
+class HEART_RATE(IntEnum):
+    SLOW = 40  # TODO
+    NORMAL = 75  # TODO
+    RAPID = 120  # TODO
+
+class HEART_STRENGTH(Enum):
+    WEAK = "weak"
+    STRONG = "strong"
+
+class HEART_RHYTHM(Enum):
+    REGULAR = "regular"
+    IRREGULAR = "irregular"
+
+class RESPIRATORY_RATE(IntEnum):
+    SLOW = 10  # TODO
+    NORMAL = 16  # TODO
+    RAPID = 25  # TODO
+
+class RESPIRATORY_RHYTHM(Enum):
+    REGULAR = "regular"
+    IRREGULAR = "irregular"
+
+class RESPIRATORY_EFFORT(Enum):
+    UNLABORED = "unlabored"
+    LABORED = "labored"
+    SHALLOW = "shallow"
+
+class SKIN_COLOR(Enum):
+    PINK = "pink"
+    PALE = "pale"
+
+class SKIN_TEMPERATURE(Enum):
+    WARM = "warm"
+    COOL = "cool"
+    HOT = "hot"
+
+class SKIN_MOISTURE(Enum):
+    DRY = "dry"
+    WET = "wet"
+    CLAMMY = "clammy"
+
+class BODY_TEMPERATURE(Enum):  # degF
+    NORMAL = 98.6
+    HOT = 102.0  # TODO
+    COLD = 96.0  # TODO
+
+class PUPILS(Enum):
+    PERRL = "equal, round, and reactive to light"
+
+class BLOOD_PRESSURE(Enum):
+    NORMAL = "a strong radial pulse"
+    WEAK = "no detectable radial pulse"
 
 class Symptom(BaseModel):
     """
@@ -17,7 +86,6 @@ class Symptom(BaseModel):
     vitals: List[Union[LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
                        RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, \
                        BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE]]
-
 
 class Condition(BaseModel):
     """
@@ -52,10 +120,9 @@ class Condition(BaseModel):
                     selected_symptoms.append(symptom)
         return selected_symptoms
 
-
 class PatientVitals(BaseModel):
     """
-    A set of values representing normal levels.
+    Starts with vital values representing normal levels.
     """
     level_of_responsiveness: str = LEVEL_OF_RESPONSIVENESS.AOx4.value
     heart_rate: int = HEART_RATE.NORMAL.value
