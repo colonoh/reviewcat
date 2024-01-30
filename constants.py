@@ -1,6 +1,18 @@
 from dataclasses import dataclass
-from enum import auto, Enum, StrEnum
+from enum import auto, Enum, StrEnum, IntEnum
 
+
+class SEX(Enum):
+    ANY = "any"
+    FEMALE = "female"
+    MALE = "male"
+
+class FREQUENCY(IntEnum):  # perecent, where 100 = 100%
+    RARELY: float = 20
+    SOMETIMES: float = 50
+    OFTEN: float = 80
+    DEFAULT: float = 90
+    ALWAYS: float = 100
 
 class LEVEL_OF_RESPONSIVENESS(Enum):
     AOx4 = "A&Ox4"
@@ -8,13 +20,6 @@ class LEVEL_OF_RESPONSIVENESS(Enum):
     AOx2 = "A&Ox2"
     AOx1 = "A&Ox1"
     # TODO: V, P, U
-
-class FREQUENCY(Enum):
-    RARELY = 0.2
-    SOMETIMES = 0.5
-    OFTEN = 0.8
-    DEFAULT = 0.9
-    ALWAYS = 1.0
 
 class HEART_RATE(Enum):
     SLOW = 40  # TODO
@@ -52,16 +57,12 @@ class SKIN_TEMPERATURE(Enum):
     COOL = "cool"
     HOT = "hot"
 
-class SKIN_COLOR(Enum):
-    PINK = "pink"
-    PALE = "pale"
-
 class SKIN_MOISTURE(Enum):
     DRY = "dry"
     WET = "wet"
     CLAMMY = "clammy"
 
-class TEMPERATURE(Enum):  # degF
+class BODY_TEMPERATURE(Enum):  # degF
     NORMAL = 98.6
     HOT = 102.0  # TODO
     COLD = 96.0  # TODO
@@ -85,7 +86,7 @@ class PatientVitals:
     skin_color: str = SKIN_COLOR.PINK.value
     skin_temperature: str = SKIN_TEMPERATURE.WARM.value
     skin_moisture: str = SKIN_MOISTURE.DRY.value
-    temperature: float = TEMPERATURE.NORMAL.value
+    body_temperature: float = BODY_TEMPERATURE.NORMAL.value
     pupils: str = PUPILS.PERRL.value
     blood_pressure: str = BLOOD_PRESSURE.NORMAL.value
 
