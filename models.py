@@ -1,5 +1,5 @@
 from enum import Enum, IntEnum
-from random import randrange, sample
+from random import choice, randrange, sample
 from typing import List, Union
 
 from pydantic import BaseModel
@@ -93,38 +93,22 @@ class Condition(BaseModel):
     A medical condition/disease/ailment.  
     """
     name: str
-    sex: SEX = SEX.ANY  # for conditions specific to a sex
+    affects_specific_sex: SEX = SEX.ANY  # this condition is limited to one sex
     description: str = ""
     symptoms: List[Symptom]
     treatments: List[str]
     evacuation_guidelines: List[str]
     # references: List[str] = []
 
-    def get_symptoms(self) -> List[Symptom]:
-        """
-        Randomly choose some of the symptoms, based on frequency.  Do not pick symptoms with conflicting vital effects.
-        """
-        selected_symptoms: List[Symptom] = []
-        vitals_to_modify: List[str] = []
 
-        # go through the symptoms in a random order so if there are conflicts, the first one doesn't always get picked over the later ones
-        for symptom in sample(self.symptoms, k=len(self.symptoms)):
-            if randrange(100) <= symptom.frequency:  # pick a number 0..100, and if it is less than the frequency, select this symptom
-                # check to see if any vitals this symptom has were already modified/conflict e.g. heart rate can't be both rapid AND slow
-                vital_already_modified = False
-                for vital in symptom.vitals:
-                    if type(vital) in vitals_to_modify:  # type being something like HEART_RATE
-                        vital_already_modified = True
-                    else:
-                        vitals_to_modify.append(type(vital))
-                if not vital_already_modified:
-                    selected_symptoms.append(symptom)
-        return selected_symptoms
-
-class PatientVitals(BaseModel):
+class Patient(BaseModel):
     """
     Starts with vital values representing normal levels.
     """
+    condition: Condition
+    selected_symptoms: List[Symptom] = []
+
+    # vitals
     level_of_responsiveness: str = LEVEL_OF_RESPONSIVENESS.AOx4.value
     heart_rate: int = HEART_RATE.NORMAL.value
     heart_strength: str = HEART_STRENGTH.STRONG.value
@@ -139,11 +123,37 @@ class PatientVitals(BaseModel):
     pupils: str = PUPILS.PERRL.value
     blood_pressure: str = BLOOD_PRESSURE.NORMAL.value
 
-    def modify_vitals(self, symptoms: List[Symptom]):
+    @property
+    def sex(self) -> str:
+        """
+        Use the condition-specific sex or generate a random one.
+        """
+        return self.condition.sex.value if self.condition.sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
+
+    def get_symptoms(self):
+        """
+        Randomly choose some of the symptoms, based on frequency.  Do not pick symptoms with conflicting vital effects.
+        """
+        vitals_to_modify: List[str] = []
+
+        # go through the symptoms in a random order so if there are conflicts, the first one doesn't always get picked over the later ones
+        for symptom in sample(self.condition.symptoms, k=len(self.condition.symptoms)):
+            if randrange(100) <= symptom.frequency:  # pick a number 0..100, and if it is less than the frequency, select this symptom
+                # check to see if any vitals this symptom has were already modified/conflict e.g. heart rate can't be both rapid AND slow
+                vital_already_modified = False
+                for vital in symptom.vitals:
+                    if type(vital) in vitals_to_modify:  # type being something like HEART_RATE
+                        vital_already_modified = True
+                    else:
+                        vitals_to_modify.append(type(vital))
+                if not vital_already_modified:
+                    self.selected_symptoms.append(symptom)
+
+    def modify_vitals(self):
         """
         For any symptoms given which modify vitals, do the modification.
         """
-        for symptom in symptoms:
+        for symptom in self.selected_symptoms:
             # overwrite the patient's default vitals with new ones
             for vital in symptom.vitals:
                 if vital.name in LEVEL_OF_RESPONSIVENESS.__members__:
