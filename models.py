@@ -128,7 +128,7 @@ class Patient(BaseModel):
         """
         Use the condition-specific sex or generate a random one.
         """
-        return self.condition.sex.value if self.condition.sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
+        return self.condition.affects_specific_sex.value if self.condition.affects_specific_sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
 
     def get_symptoms(self):
         """
