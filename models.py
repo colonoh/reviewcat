@@ -10,7 +10,7 @@ class SEX(Enum):
     FEMALE = "female"
     MALE = "male"
 
-class FREQUENCY(IntEnum):  # perecent, where 100 = 100%
+class FREQUENCY(IntEnum):  # perecent, where 100 = 100%  # TODO: FloatEnum?
     RARELY: float = 20
     SOMETIMES: float = 50
     OFTEN: float = 80
@@ -65,7 +65,7 @@ class SKIN_MOISTURE(Enum):
     WET = "wet"
     CLAMMY = "clammy"
 
-class BODY_TEMPERATURE(Enum):  # degF
+class BODY_TEMPERATURE(Enum):  # degF  # TODO: FloatEnum?
     NORMAL = 98.6
     HOT = 102.0  # TODO
     COLD = 96.0  # TODO
@@ -79,10 +79,11 @@ class BLOOD_PRESSURE(Enum):
 
 class Symptom(BaseModel):
     """
-    A sign or symptom.  May have an effect on vitals (potentially multiple, hence the list).
+    A sign or symptom.  May have an effect on vitals.  If there are multiple vital modifiers in the `vitals` list, they 
+    are all active at the same time (it is an AND list).  E.g. vitals = [HEART_RATE_RAPID AND HEART_STRENGTH_WEAK].
     """
     name: str
-    frequency: FREQUENCY = FREQUENCY.DEFAULT
+    frequency: FREQUENCY = FREQUENCY.DEFAULT  # how often does this symptom occur
     vitals: List[Union[LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
                        RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, \
                        BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE]] = []
@@ -92,7 +93,7 @@ class Condition(BaseModel):
     A medical condition/disease/ailment.  
     """
     name: str
-    sex: SEX = SEX.ANY  # conditions specific to a sex
+    sex: SEX = SEX.ANY  # for conditions specific to a sex
     description: str = ""
     symptoms: List[Symptom]
     treatments: List[str]
