@@ -1,6 +1,7 @@
 - [ ] add distribution for values like heart rate
 - [ ] add tests
 - [ ] add CI
+- [ ] add code coverage
 - [ ] add many more conditions
 - [ ] add references for conditions
 - [ ] add a frontend
