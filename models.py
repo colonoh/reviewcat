@@ -10,22 +10,20 @@ HEART_RHYTHM, RESPIRATORY_RATE, RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COL
 BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE
 
 
-# e.g. SKIN_COLOR_PALE, HEART_RATE_RAPID, HEART_RATE_SLOW
-# class VitalEffect(BaseModel):
-    # modifiers: List[]
-
-
-# rapid OR slow OR weak OR irregular heartbeat (CAN'T BE RAPID AND SLOW) (but can be weak and/or irregular)
-# pale, cool, clammy skin 
 class Symptom(BaseModel):
+    """
+    A sign or symptom.  May affect vitals.  Each item in the vitals list 
+    """
     name: str
     frequency: FREQUENCY = FREQUENCY.DEFAULT
     vitals: List[List[Union[LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
                             RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, \
-                            BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE]]]  # outer list is OR, inner list is AND
+                            BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE]]]  # outer list is OR'd, inner list is AND'd
 
 
 class Condition(BaseModel):
+    """
+    """
     name: str
     sex: SEX = SEX.ANY  # conditions specific to a sex
     description: str = ""
@@ -36,7 +34,6 @@ class Condition(BaseModel):
 
 
 # read in a condition, symptoms, vitals
-
 s1 = Symptom(name="Pale, cool, clammy skin",
              vitals=[[SKIN_COLOR.PALE, SKIN_TEMPERATURE.COOL, SKIN_MOISTURE.CLAMMY]])
 s2 = Symptom(name="Rapid heartbeat",
@@ -45,9 +42,9 @@ s3 = Symptom(name="Slow heartbeat",
              vitals=[[HEART_RATE.SLOW]])  # conflicts with rapid heart rate
 
 condition = Condition(name="Shock",
-              symptoms=[s1, s2, s3],
-              treatments=["Treatment 1"],
-              evacuation_guidelines=["Evac 1"])
+                      symptoms=[s1, s2, s3],
+                      treatments=["Treatment 1"],
+                      evacuation_guidelines=["Evac 1"])
 # print(condition)
 
 # pick some of the symptoms (but keep all of them)
@@ -57,12 +54,12 @@ vitals_to_modify: List[str] = []  # type: Union...
 # go through the symptoms in a random order so if there are conflicts, the first one doesn't always get expressed over the later ones
 for symptom in sample(condition.symptoms, k=len(condition.symptoms)):
     if randrange(100) <= symptom.frequency:  # pick a number 0..100, and if less than the freq, select this symptom
-        # what if we have a symptoms/vital conflict?  e.g. heartbeat can't be rapid AND slow
+        # check to see if any vitals this symptom has were already modified/conflict e.g. heart rate can't be both rapid AND slow
         vital_already_modified = False
         for vitals in symptom.vitals:
             for vital in vitals:
-                if type(vital) in vitals_to_modify:
-                    vital_already_modified = True  # don't add this symptom because it has a vital which another symptom is already modifying
+                if type(vital) in vitals_to_modify:  # type being something like HEART_RATE
+                    vital_already_modified = True
                 else:
                     vitals_to_modify.append(type(vital))
         if not vital_already_modified:
@@ -113,3 +110,4 @@ for s in selected_symptoms:
 print(patient)
 
 # return all the symptoms, treatments, evac guidelines
+print(condition)
