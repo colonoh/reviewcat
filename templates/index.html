@@ -1,31 +1,80 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>WFR Review</title>
-    </head>
-    <body>
-        <h1>WFR Review</h1>
-        <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p>
-        <div>
-            <h2>Symptoms</h2>
-            <ul>
-                {% for symptom in patient.selected_symptoms if not symptom.vitals %}
-                <li>{{ symptom.name }}</li> 
-                {% endfor %}
-            </ul>
-        </div>
-        <div>
-            <h2>Vitals</h2>
-            <ul>
-                <li>Level of responsiveness: {{ patient.level_of_responsiveness }}</li>
-                <li>Heart: {{ patient.heart_rate }} bpm / {{ patient.heart_strength }} / {{ patient.heart_rhythm }}</li>
-                <li>Respiratory: {{ patient.respiratory_rate }} breaths/min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
-                <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} / {{ patient.skin_moisture }}</li>
-                <li>Body temperature: {{ patient.body_temperature }} &#176;F</li>
-                <li>Pupils: {{ patient.pupils }}</li>
-                <li>Blood pressure: {{ patient.blood_pressure }}</li>
-            </ul>
-        </div>
-        <!-- {{ patient }} -->
-    </body>
+  <head>
+    <title>WFR Review</title>
+    <style>
+      .hidden_info {
+        display: none;
+      }
+
+      .special_text {
+        border-bottom: 1px dotted black;
+        cursor: help;
+        display: inline
+      }
+    </style>
+
+  </head>
+  <body>
+    <h1>WFR Review</h1>
+
+    <button onclick="myFunction()">Reveal</button> <button onclick="window.location.reload()">Give me a new patient</button>
+
+
+    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p>
+    <div>
+      <h2>Vitals</h2>
+      <ul>
+        <li>Level of responsiveness: {{ patient.level_of_responsiveness }}</li>
+        <li>Heart: {{ patient.heart_rate }} bpm / {{ patient.heart_strength }} / {{ patient.heart_rhythm }}</li>
+        <li>Respiratory: {{ patient.respiratory_rate }} breaths/min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
+        <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} / {{ patient.skin_moisture }}</li>
+        <li>Body temperature: {{ patient.body_temperature }} &#176;F</li>
+        <li>Pupils: {{ patient.pupils }}</li>
+        <li>Blood pressure: {{ patient.blood_pressure }}</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Symptoms</h2>
+      <ul>
+        {% for symptom in patient.condition.symptoms %}
+          {% if symptom in patient.selected_symptoms and not symptom.vitals %}
+            <span><li>{{ symptom.name }}</li></span>
+          {% elif symptom.vitals %}
+            <div class="hidden_info" ><li><span class="special_text" title="Symptoms which affect vital signs are hidden">{{ symptom.name }}</span></li></div>
+          {% else %}
+            <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom.name }}</span></li></div>
+
+          {% endif  %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="hidden_info">
+      <h2>{{ patient.condition.name }}</h2>
+      <p>{{ patient.condition.description }}</p>
+      <h2>Treatments</h2>
+      <ul>
+        {% for treatment in patient.condition.treatments %}
+        <li>{{ treatment }}</li> 
+        {% endfor %}
+      </ul>
+      <h2>Evacuation guidelines</h2>
+      <ul>
+        {% for guideline in patient.condition.evacuation_guidelines %}
+        <li>{{ guideline }}</li> 
+        {% endfor %}
+      </ul>
+    </div>
+
+    <script>
+      function myFunction() {
+        const collection = document.getElementsByClassName("hidden_info");
+        for (let i = 0; i < collection.length; i++) {
+        collection[i].style.display = "block";
+        }
+      }
+    </script>
+    
+  </body>
 </html>
