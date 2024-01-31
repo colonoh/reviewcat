@@ -2,10 +2,14 @@
 - [ ] add tests
 - [ ] add CI
 - [ ] add code coverage
+- [ ] add type checking?
 - [ ] add many more conditions
 - [ ] add references for conditions
 - [ ] add a frontend
 - [ ] present information as a SOAP note?
-- [ ] host the website
+- [ ] host the website (AWS Fargate?)
 - [ ] add potential backstory/events leading to?
 - [ ] add AI-generated patient picture/scene?
+- [ ] dockerize?
+- [ ] infrastructure through code?
+- [ ] analytics?
