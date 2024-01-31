@@ -1,5 +1,5 @@
 from enum import Enum, IntEnum
-from random import choice, randrange, sample
+from random import choice, random, sample
 from typing import List, Union
 
 from pydantic import BaseModel
@@ -10,12 +10,12 @@ class SEX(Enum):
     FEMALE = "female"
     MALE = "male"
 
-class FREQUENCY(IntEnum):  # perecent, where 100 = 100%  # TODO: FloatEnum?
-    RARELY: float = 20
-    SOMETIMES: float = 50
-    OFTEN: float = 80
-    DEFAULT: float = 90
-    ALWAYS: float = 100
+class FREQUENCY(float, Enum):  # perecent, where 1. = 100%
+    RARELY = .2
+    SOMETIMES = .5
+    OFTEN = .8
+    DEFAULT = .9
+    ALWAYS = 1.
 
 class LEVEL_OF_RESPONSIVENESS(Enum):
     AOx4 = "A&Ox4"
@@ -65,7 +65,7 @@ class SKIN_MOISTURE(Enum):
     WET = "wet"
     CLAMMY = "clammy"
 
-class BODY_TEMPERATURE(Enum):  # degF  # TODO: FloatEnum?
+class BODY_TEMPERATURE(float, Enum):  # degF
     NORMAL = 98.6
     HOT = 102.0  # TODO
     COLD = 96.0  # TODO
@@ -105,6 +105,7 @@ class Patient(BaseModel):
     """
     Starts with vital values representing normal levels.
     """
+    name: str = "Alex"
     condition: Condition
     selected_symptoms: List[Symptom] = []
 
@@ -134,18 +135,18 @@ class Patient(BaseModel):
         """
         Randomly choose some of the symptoms, based on frequency.  Do not pick symptoms with conflicting vital effects.
         """
-        vitals_to_modify: List[str] = []
+        vitals_to_modify: set[str] = set()
 
         # go through the symptoms in a random order so if there are conflicts, the first one doesn't always get picked over the later ones
         for symptom in sample(self.condition.symptoms, k=len(self.condition.symptoms)):
-            if randrange(100) <= symptom.frequency:  # pick a number 0..100, and if it is less than the frequency, select this symptom
+            if random() <= symptom.frequency:  # pick a number 0..1, and if it is less than the frequency, select this symptom
                 # check to see if any vitals this symptom has were already modified/conflict e.g. heart rate can't be both rapid AND slow
                 vital_already_modified = False
                 for vital in symptom.vitals:
                     if type(vital) in vitals_to_modify:  # type being something like HEART_RATE
                         vital_already_modified = True
                     else:
-                        vitals_to_modify.append(type(vital))
+                        vitals_to_modify.add(type(vital))
                 if not vital_already_modified:
                     self.selected_symptoms.append(symptom)
 
