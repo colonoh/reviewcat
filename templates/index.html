@@ -5,7 +5,27 @@
     </head>
     <body>
         <h1>WFR Review</h1>
-        <p>You have a {{ patient.sex }} patient.
-        {{ patient }}
+        <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p>
+        <div>
+            <h2>Symptoms</h2>
+            <ul>
+                {% for symptom in patient.selected_symptoms if not symptom.vitals %}
+                <li>{{ symptom.name }}</li> 
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h2>Vitals</h2>
+            <ul>
+                <li>Level of responsiveness: {{ patient.level_of_responsiveness }}</li>
+                <li>Heart: {{ patient.heart_rate }} bpm / {{ patient.heart_strength }} / {{ patient.heart_rhythm }}</li>
+                <li>Respiratory: {{ patient.respiratory_rate }} breaths/min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
+                <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} / {{ patient.skin_moisture }}</li>
+                <li>Body temperature: {{ patient.body_temperature }} &#176;F</li>
+                <li>Pupils: {{ patient.pupils }}</li>
+                <li>Blood pressure: {{ patient.blood_pressure }}</li>
+            </ul>
+        </div>
+        <!-- {{ patient }} -->
     </body>
 </html>
