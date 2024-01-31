@@ -19,9 +19,10 @@
     <h1>WFR Review</h1>
 
     <button onclick="myFunction()">Reveal</button> <button onclick="window.location.reload()">Give me a new patient</button>
+
     <!-- TODO: grey out button after use -->
 
-    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p>
+    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition.name }}</strong>: {{ patient.condition.description }}</p>
     <div>
       <h2>Vitals</h2>
       <ul>
@@ -52,9 +53,11 @@
       </ul>
     </div>
 
+    
     <div class="hidden_info">
-      <h2>{{ patient.condition.name }}</h2>
+<!--       <p><strong>{{ patient.condition.name }}</strong></p>
       <p>{{ patient.condition.description }}</p>
+ -->
       <h2>Treatments</h2>
       <ul>
         {% for treatment in patient.condition.treatments %}

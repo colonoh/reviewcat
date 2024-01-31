@@ -94,7 +94,7 @@ class Condition(BaseModel):
     """
     name: str
     affects_specific_sex: SEX = SEX.ANY  # this condition is limited to one sex
-    description: str = ""
+    description: str
     symptoms: List[Symptom]
     treatments: List[str]
     evacuation_guidelines: List[str]
