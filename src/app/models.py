@@ -79,8 +79,8 @@ class BLOOD_PRESSURE(Enum):
 
 class Symptom(BaseModel):
     """
-    A sign or symptom.  May have an effect on vitals.  If there are multiple vital modifiers in the `vitals` list, they 
-    are all active at the same time (it is an AND list).  E.g. vitals = [HEART_RATE_RAPID AND HEART_STRENGTH_WEAK].
+    A sign or symptom.  If the symptom has an effect on vitals, the vital it affects should be in `vitals`.  Multiple 
+    items in the `vitals` list are treated as if they are AND-ed together.  
     """
     name: str
     frequency: FREQUENCY = FREQUENCY.DEFAULT  # how often does this symptom occur
@@ -93,7 +93,7 @@ class Condition(BaseModel):
     A medical condition/disease/ailment.  
     """
     name: str
-    affects_specific_sex: SEX = SEX.ANY  # this condition is limited to one sex
+    sex: SEX = SEX.ANY  # this condition is limited to this sex
     description: str
     symptoms: List[Symptom]
     treatments: List[str]
@@ -127,9 +127,9 @@ class Patient(BaseModel):
     @property
     def sex(self) -> str:
         """
-        Use the condition-specific sex or generate a random one.
+        Use the condition-specific sex or generate a random one if it affects everyone.
         """
-        return self.condition.affects_specific_sex.value if self.condition.affects_specific_sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
+        return self.condition.sex.value if self.condition.sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
 
     def get_symptoms(self):
         """
