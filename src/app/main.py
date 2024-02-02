@@ -2,15 +2,16 @@ from random import choice
 
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
+from mangum import Mangum
 
-from .wfr_conditions import conditions
-from .models import SEX, LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
+from wfr_conditions import conditions
+from models import SEX, LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
 RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, BODY_TEMPERATURE, PUPILS, \
 BLOOD_PRESSURE, Symptom, Condition, Patient
 
 
 app = FastAPI()
-templates = Jinja2Templates(directory="src/app/templates")
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
@@ -24,3 +25,5 @@ def index(request: Request):
     patient.modify_vitals()
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
+
+handler = Mangum(app)
