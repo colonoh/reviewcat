@@ -5,11 +5,11 @@
 - [ ] add type checking?
 - [ ] add many more conditions
 - [ ] add references for conditions
-- [ ] add a frontend
+- [x] add a frontend
 - [ ] present information as a SOAP note?
 - [ ] host the website (AWS Fargate?)
 - [ ] add potential backstory/events leading to?
 - [ ] add AI-generated patient picture/scene?
-- [ ] dockerize?
-- [ ] infrastructure through code?
+- [x] dockerize?
+- [ ] auto-build and on tests passing
 - [ ] analytics?
