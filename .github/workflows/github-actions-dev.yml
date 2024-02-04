@@ -49,16 +49,12 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build and push the Docker image
-      env:
-        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        REPOSITORY: reviewcat
-        TAG: latest
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$TAG .
-        docker push $REGISTRY/$REPOSITORY:$TAG
+        docker build -t ${{ steps.login-ecr.outputs.registry }}/reviewcat .
+        docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat
 
     - name: Deploy a new Lambda 
       run: |
         aws lambda update-function-code \
             --function-name reviewcat_dev \
-            --image-uri $REGISTRY/$REPOSITORY:$TAG
+            --image-uri ${{ steps.login-ecr.outputs.registry }}/reviewcat
