@@ -50,11 +50,11 @@ jobs:
 
     - name: Build and push the Docker image
       run: |
-        docker build -t ${{ steps.login-ecr.outputs.registry }}/reviewcat .
-        docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat
+        docker build -t ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest .
+        docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
 
     - name: Deploy a new Lambda 
       run: |
         aws lambda update-function-code \
             --function-name reviewcat_dev \
-            --image-uri ${{ steps.login-ecr.outputs.registry }}/reviewcat
+            --image-uri ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
