@@ -9,9 +9,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  AWS_REGION: us-west-2
-
 permissions:
   contents: read
 
@@ -19,6 +16,7 @@ jobs:
   Test:
 
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
     - uses: actions/checkout@v3
@@ -46,7 +44,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ secret.AWS_REGION }}
 
     - name: Login to Amazon ECR
       id: login-ecr
