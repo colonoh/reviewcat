@@ -49,7 +49,11 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2
 
     - name: Build, tag, and push, the Docker image
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: reviewcat
+        TAG: latest
+        
       run: |
-        docker build --tag reviewcat .
-        docker tag reviewcat:latest 447430344185.dkr.ecr.us-west-2.amazonaws.com/reviewcat:latest
-        docker push 447430344185.dkr.ecr.us-west-2.amazonaws.com/reviewcat:latest
+        docker build -t $REGISTRY/$REPOSITORY:$TAG .
+        docker push $REGISTRY/$REPOSITORY:$TAG
