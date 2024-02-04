@@ -47,3 +47,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push, the Docker image
+      run: |
+        docker build --tag reviewcat .
+        docker tag reviewcat:latest 447430344185.dkr.ecr.us-west-2.amazonaws.com/reviewcat:latest
+        docker push 447430344185.dkr.ecr.us-west-2.amazonaws.com/reviewcat:latest
