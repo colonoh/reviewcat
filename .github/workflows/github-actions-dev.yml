@@ -55,12 +55,8 @@ jobs:
         context: .
         outputs: type=docker
         platforms: linux/arm64
-        push: false
+        push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
-    # couldn't get docker/build-push-action@v5 to push correctly so doing it myself
-    - name: Push the Docker image
-      run: |
-        docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
     - name: Deploy a new Lambda 
       run: |
         aws lambda update-function-code \
