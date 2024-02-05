@@ -37,19 +37,14 @@ jobs:
     - name: Test with pytest
       run: |
         pytest -vvv
-        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::447430344185:role/github_actions_reviewcat
         aws-region: us-west-2
-
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
-
-    - name: Checkout
-      uses: actions/checkout@v4
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
@@ -59,18 +54,15 @@ jobs:
       with:
         context: .
         platforms: linux/arm64
-        push: true
+        push: false
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
-
-
-    # - name: Build, tag, and push the Docker image
-    #   run: |
-    #     docker build -t reviewcat:latest .
-    #     docker tag reviewcat:latest ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
-    #     docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
-
-    # - name: Deploy a new Lambda 
-    #   run: |
-    #     aws lambda update-function-code \
-    #         --function-name reviewcat_dev \
-    #         --image-uri ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+    - name: Build, tag, and push the Docker image
+      run: |
+        # docker build -t reviewcat:latest .
+        # docker tag reviewcat:latest ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+        docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+    - name: Deploy a new Lambda 
+      run: |
+        aws lambda update-function-code \
+            --function-name reviewcat_dev \
+            --image-uri ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
