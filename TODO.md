@@ -7,7 +7,7 @@
 - [ ] add references for conditions
 - [x] add a frontend
 - [ ] present information as a SOAP note?
-- [ ] host the website (AWS Fargate?)
+- [x] host the website
 - [ ] add potential backstory/events leading to?
 - [ ] add AI-generated patient picture/scene?
 - [x] dockerize?
