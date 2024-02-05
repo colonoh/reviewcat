@@ -51,6 +51,7 @@ jobs:
     - name: Build and push the Docker image
       run: |
         docker build -t ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest .
+        docker tag ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
         docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
 
     - name: Deploy a new Lambda 
