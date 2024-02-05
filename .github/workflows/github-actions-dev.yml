@@ -13,9 +13,8 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     environment: dev
-    # id-token needed for aws auth with openid connect
     permissions:
-      id-token: write
+      id-token: write  # needed for AWS auth with OIDC
       contents: read
 
     steps:
@@ -55,7 +54,7 @@ jobs:
       with:
         context: .
         platforms: linux/arm64
-        provenance: false  # provenance=false or else lambda doesn't like the image produced
+        provenance: false  # needs to be false or lambda doesn't like the type of image produced
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
     - name: Deploy a new Lambda 
