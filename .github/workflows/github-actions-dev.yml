@@ -53,10 +53,11 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        outputs: type=docker
         platforms: linux/arm64
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+    - name: Print my docker imageid in a separate step
+      run: echo "metadata.image.name ${{ steps.docker_build.outputs.metadata.image.name }}"
     - name: Deploy a new Lambda 
       run: |
         aws lambda update-function-code \
