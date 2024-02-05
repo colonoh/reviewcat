@@ -13,6 +13,7 @@ jobs:
   Test:
     runs-on: ubuntu-latest
     environment: dev
+    # id-token needed for aws auth with openid connect
     permissions:
       id-token: write
       contents: read
@@ -58,10 +59,8 @@ jobs:
         provenance: false
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
-    - name: Print my docker imageid in a separate step
-      run: echo "metadata.image.name ${{ steps.docker_build.outputs.metadata.image.name }}"
-    - name: Print my docker imageid in a separate step
-      run: echo "imageid ${{ steps.docker_build.outputs.imageid }}"
+    - name: Debug
+      run: echo "imageName=${{ fromJSON(steps.build-push-action.outputs.metadata)['image.name'] }}"
 
     - name: Deploy a new Lambda 
       run: |
