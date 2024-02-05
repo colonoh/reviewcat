@@ -49,15 +49,20 @@ jobs:
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      # provenance=false or else lambda doesn't like the image produced
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
         context: .
         platforms: linux/arm64
+        provenance: false
         push: true
         tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
     - name: Print my docker imageid in a separate step
       run: echo "metadata.image.name ${{ steps.docker_build.outputs.metadata.image.name }}"
+    - name: Print my docker imageid in a separate step
+      run: echo "imageid ${{ steps.docker_build.outputs.imageid }}"
+
     - name: Deploy a new Lambda 
       run: |
         aws lambda update-function-code \
