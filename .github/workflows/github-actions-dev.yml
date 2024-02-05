@@ -55,11 +55,11 @@ jobs:
         context: .
         platforms: linux/arm64
         push: false
-        tags: ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+        tags: reviewcat:latest
     - name: Build, tag, and push the Docker image
       run: |
         # docker build -t reviewcat:latest .
-        # docker tag reviewcat:latest ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+        docker tag reviewcat:latest ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
         docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
     - name: Deploy a new Lambda 
       run: |
