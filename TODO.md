@@ -1,6 +1,6 @@
 - [ ] add distribution for values like heart rate
 - [ ] add tests
-- [ ] add CI
+- [x] add CI
 - [ ] add code coverage
 - [ ] add type checking?
 - [ ] add many more conditions
@@ -11,5 +11,6 @@
 - [ ] add potential backstory/events leading to?
 - [ ] add AI-generated patient picture/scene?
 - [x] dockerize?
-- [ ] auto-build and on tests passing
+- [ ] multi-stage docker build?
+- [x] auto-build and on tests passing
 - [ ] analytics?
