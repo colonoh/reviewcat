@@ -48,10 +48,10 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build and push the Docker image
+    - name: Build, tag, and push the Docker image
       run: |
         docker build -t ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest .
-        docker tag ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
+        docker tag reviewcat:latest ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
         docker push ${{ steps.login-ecr.outputs.registry }}/reviewcat:latest
 
     - name: Deploy a new Lambda 
