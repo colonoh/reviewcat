@@ -26,4 +26,31 @@ def index(request: Request):
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
+
+@app.get("/dev")
+def index(request: Request):
+    """
+    Pick a random condition, get some of the symptoms, create baseline patient vitals, modify them based on the 
+    symptoms, and return that data to the template.
+    """
+    patient = Patient(condition=choice(conditions))
+    patient.get_symptoms()
+    patient.modify_vitals()
+
+    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
+
+
+@app.get("/dev/")
+def index(request: Request):
+    """
+    Pick a random condition, get some of the symptoms, create baseline patient vitals, modify them based on the 
+    symptoms, and return that data to the template.
+    """
+    patient = Patient(condition=choice(conditions))
+    patient.get_symptoms()
+    patient.modify_vitals()
+
+    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
+
+
 handler = Mangum(app)
