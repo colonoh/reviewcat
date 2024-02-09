@@ -23,6 +23,7 @@ def index(request: Request):
     patient = Patient(condition=choice(conditions))
     patient.get_symptoms()
     patient.modify_vitals()
+    print("/")
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
@@ -36,6 +37,7 @@ def index(request: Request):
     patient = Patient(condition=choice(conditions))
     patient.get_symptoms()
     patient.modify_vitals()
+    print("/dev")
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
@@ -49,6 +51,7 @@ def index(request: Request):
     patient = Patient(condition=choice(conditions))
     patient.get_symptoms()
     patient.modify_vitals()
+    print("/dev/")
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
