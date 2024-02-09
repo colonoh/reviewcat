@@ -10,7 +10,7 @@ RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOIST
 BLOOD_PRESSURE, Symptom, Condition, Patient
 
 
-app = FastAPI()
+app = FastAPI(root_path="/dev/")
 templates = Jinja2Templates(directory="templates")
 
 
