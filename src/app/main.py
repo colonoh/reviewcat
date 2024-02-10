@@ -28,4 +28,19 @@ def index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
 
+@app.get("/dev/")  # TODO: this is hardcoded to the stage right now, don't do that
+def index(request: Request):
+    """
+    Pick a random condition, get some of the symptoms, create baseline patient vitals, modify them based on the 
+    symptoms, and return that data to the template.
+    """
+    print(f"root_path: {request.scope.get("root_path")}")
+    patient = Patient(condition=choice(conditions))
+    patient.get_symptoms()
+    patient.modify_vitals()
+
+    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
+
+
+
 handler = Mangum(app)
