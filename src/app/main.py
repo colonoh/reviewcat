@@ -10,11 +10,11 @@ RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOIST
 BLOOD_PRESSURE, Symptom, Condition, Patient
 
 
-app = FastAPI()
+app = FastAPI(root_path="/dev/")
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/dev/")  # TODO: this is hardcoded to the stage right now, don't do that
+@app.get("/")  # TODO: this is hardcoded to the stage right now, don't do that
 def index(request: Request):
     """
     Pick a random condition, get some of the symptoms, create baseline patient vitals, modify them based on the 
