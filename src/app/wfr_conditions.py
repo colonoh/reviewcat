@@ -3,6 +3,10 @@ RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOIST
 BLOOD_PRESSURE, Symptom, Condition, Patient
 
 
+# how to deal with: 
+# - multiple of the same discomforts (e.g. discomfort in the neck, jaw, teeth, and/or back) (e.g. rapid, slow, and/or weak pulse)
+# - mutually exclusive symptoms (e.g. rapid pulse, slow pulse)
+
 conditions = [Condition(name="Angina",
                         description="Pain from diminished blood flow to the heart.",
                         symptoms=[Symptom(name="Nausea"), 

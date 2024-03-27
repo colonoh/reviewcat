@@ -28,14 +28,4 @@ def index(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
 
 
-@app.get("/dev/test1/")
-def test1(request: Request):
-    return ("message": f"root_path /dev/test1/: {request.scope.get("root_path")}")
-
-
-@app.get("/test1/")
-def test2(request: Request):
-    return ("message": f"root_path /test1/: {request.scope.get("root_path")}")
-
-
 handler = Mangum(app)
