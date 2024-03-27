@@ -12,6 +12,7 @@ BLOOD_PRESSURE, Symptom, Condition, Patient
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+version = "0.0.1"
 
 
 @app.get("/dev/")  # TODO: this is hardcoded to the stage right now, don't do that
@@ -25,7 +26,7 @@ def index(request: Request):
     patient.get_symptoms()
     patient.modify_vitals()
 
-    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient})
+    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient, "version": version})
 
 
 handler = Mangum(app)
