@@ -2,7 +2,7 @@ from random import choice
 
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
-from mangum import Mangum
+from mangum import Mangum # type: ignore
 
 from wfr_conditions import conditions
 from models import SEX, LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
@@ -15,7 +15,7 @@ templates = Jinja2Templates(directory="templates")
 version = "0.0.2"
 
 
-@app.get("/dev/")  # TODO: this is hardcoded to the stage right now, don't do that
+@app.get("/dev/")  # TODO: this is hardcoded to get this to work on AWS Lambda, fix this someday
 def index(request: Request):
     """
     Pick a random condition, get some of the symptoms, create baseline patient vitals, modify them based on the 
