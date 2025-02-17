@@ -64,6 +64,11 @@ class PUPILS(Enum):
     NOT_PERRL = "not equal, round, and reactive to light"
     PERRL = "equal, round, and reactive to light"
 
+class DIFFICULTY(Enum):  # difficulty of the quiz
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
+
 def generate_name() -> str:
     unisex_names = [
         "Alex", "Andy", "Avery", "Blake", "Casey", "Charlie", "Dakota", 
@@ -105,6 +110,7 @@ class SuperPatient(BaseModel):
     pulils: PUPILS = PUPILS.PERRL
     # TODO: blood pressure
 
+    difficulty: DIFFICULTY = DIFFICULTY.EASY
     condition_name: str = None
     condition_description: str = None
     condition_symptoms: list[str] = []
