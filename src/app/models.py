@@ -1,8 +1,8 @@
 from enum import Enum, IntEnum
-from random import choice, random, sample
+from random import choice, random, sample, randint
 from typing import List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
 
 
 class SEX(Enum):
@@ -99,6 +99,24 @@ class Condition(BaseModel):
     treatments: List[str]
     evacuation_guidelines: List[str]
     # references: List[str] = []
+
+
+def generate_age() -> int:
+    return randint(18, 80)
+
+class Human(BaseModel):
+    age: int = Field(default_factory=generate_age)
+    heart_rate: int = None  # Will be set dynamically
+    respiratory_rate: int = None  # Will be set dynamically
+
+    @model_validator(mode="after")
+    def generate_dynamic_values(cls, values):
+        """
+        Cause I don't a better way, generate the values based on other values here.
+        """
+        values.heart_rate = 220 - values.age
+        values.respiratory_rate = 22 - values.age
+        return values
 
 
 class Patient(BaseModel):
