@@ -12,23 +12,13 @@ class TestVitals:
         p.modify_vitals("level_of_responsiveness", "decrease")
         p.modify_vitals("level_of_responsiveness", "decrease")
         p.modify_vitals("level_of_responsiveness", "decrease")
-        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.Unresponsive
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.UNRESPONSIVE
         p.modify_vitals("level_of_responsiveness", "decrease")
-        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.Unresponsive
-        assert str(p.level_of_responsiveness) == "Unresponsive"
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.UNRESPONSIVE
+        assert str(p.level_of_responsiveness) == "unresponsive"
 
 
 class TestPatient:
-    def test_sex(self):
-        c = Condition(name="Dummy",
-                      description="",
-                      sex=SEX.MALE,
-                      symptoms=[Symptom(name="Dummy")],
-                      treatments=[""],
-                      evacuation_guidelines=[""])
-        p = Patient(condition=c)
-        assert p.sex == SEX.MALE.value
-
     def test_level_of_responsiveness(self):
         v = SuperPatient()
         assert v.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx4
@@ -44,9 +34,6 @@ class TestPatient:
 
     def test_heart_rate(self):
         v = SuperPatient()
-
-
-                
     #     v.modify_vitals("heart_rate", "decrease")
     #     assert v.heart_rate == 75*.8
     #     v.modify_vitals("heart_rate", "increase")

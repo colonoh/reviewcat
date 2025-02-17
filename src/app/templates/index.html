@@ -23,7 +23,7 @@
 
     <!-- TODO: grey out button after use -->
 
-    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition.name }}</strong>: {{ patient.condition.description }}</p>
+    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition_name }}</strong>: {{ patient.condition_description }}</p>
     <div>
       <h2>Vitals</h2>
       <ul>
@@ -41,12 +41,12 @@
       <ul>  
         <!-- TODO: there's a bug here where vitals which are not selected or still showing "vital signs are hidden" -->
         <!-- TODO: should move as much logic to the backend as possible so the frontend just shows it -->
-        {% for symptom in patient.condition.symptoms %}
-          {% if symptom in patient.selected_symptoms and not symptom.vitals %}
+        {% for symptom in patient.condition_symptoms %}
+          <!-- {% if symptom in patient.selected_symptoms and not symptom.vitals %} -->
             <span><li>{{ symptom.name }}</li></span>
-          {% elif symptom.vitals %}
+          <!-- {% elif symptom.vitals %} -->
             <div class="hidden_info" ><li><span class="special_text" title="Symptoms which affect vital signs are hidden">{{ symptom.name }}</span></li></div>
-          {% else %}
+          <!-- {% else %} -->
             <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom.name }}</span></li></div>
 
           {% endif  %}
@@ -56,18 +56,15 @@
 
     
     <div class="hidden_info">
-<!--       <p><strong>{{ patient.condition.name }}</strong></p>
-      <p>{{ patient.condition.description }}</p>
- -->
       <h2>Treatments</h2>
       <ul>
-        {% for treatment in patient.condition.treatments %}
+        {% for treatment in patient.condition_treatments %}
         <li>{{ treatment }}</li> 
         {% endfor %}
       </ul>
       <h2>Evacuation guidelines</h2>
       <ul>
-        {% for guideline in patient.condition.evacuation_guidelines %}
+        {% for guideline in patient.condition_evacuation_guidelines %}
         <li>{{ guideline }}</li> 
         {% endfor %}
       </ul>
