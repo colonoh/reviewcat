@@ -11,9 +11,8 @@ jobs:
   OnlyTest:
     runs-on: ubuntu-latest
     environment: dev
-    permissions:
-      id-token: write  # needed for AWS auth with OIDC
-      contents: read
+    # permissions:
+    #   contents: read
 
     steps:
     - uses: actions/checkout@v4
