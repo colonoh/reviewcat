@@ -6,28 +6,16 @@ from pydantic import BaseModel
 
 
 class SEX(Enum):
-    ANY = "any"
     FEMALE = "female"
     MALE = "male"
+    ANY = "any"
 
-class FREQUENCY(float, Enum):  # perecent, where 1. = 100%
-    RARELY = .2
-    SOMETIMES = .5
-    OFTEN = .8
-    DEFAULT = .9
-    ALWAYS = 1.
-
-class LEVEL_OF_RESPONSIVENESS(Enum):
-    AOx4 = "A&Ox4"
-    AOx3 = "A&Ox3"
-    AOx2 = "A&Ox2"
-    AOx1 = "A&Ox1"
+class LEVEL_OF_RESPONSIVENESS(IntEnum):
+    AOx4 = 4
+    AOx3 = 3
+    AOx2 = 2
+    AOx1 = 1
     # TODO: V, P, U
-
-class HEART_RATE(IntEnum):
-    SLOW = 40  # TODO
-    NORMAL = 75  # TODO
-    RAPID = 120  # TODO
 
 class HEART_STRENGTH(Enum):
     WEAK = "weak"
@@ -36,6 +24,64 @@ class HEART_STRENGTH(Enum):
 class HEART_RHYTHM(Enum):
     REGULAR = "regular"
     IRREGULAR = "irregular"
+
+def generate_name() -> str:
+    return "Alex"  # TODO
+
+def generate_age() -> int:
+    return 75  # TODO
+
+def generate_sex() -> SEX:
+    return choice(list(SEX))
+
+
+
+class SuperPatient(BaseModel):
+    name: str = generate_name()
+    age: int = generate_age()
+    sex: SEX = generate_sex()
+
+    # def __init__(self):
+    #     self.heart_rate = self.generate_heart_rate()
+
+    # vitals
+    level_of_responsiveness: LEVEL_OF_RESPONSIVENESS = LEVEL_OF_RESPONSIVENESS.AOx4
+    heart_rate: int = 75
+    heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
+    heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
+
+    def modify_vitals(self, what: str, how: str):
+        if what == "level_of_responsiveness":
+            # TODO: read `how`
+            if how == "decrease":
+                # TODO add lower bounds checking
+                self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS(self.level_of_responsiveness - 1)
+        elif what == "heart_rate":
+            if how == "decrease":
+                self.heart_rate *= 0.8
+            elif how == "increase":
+                self.heart_rate *= 1.2
+        elif what == "heart_strength":
+            if how == "set_weak":
+                self.heart_strength = HEART_STRENGTH.WEAK
+        elif what == "heart_rhythm":
+            if how == "set_irregular":
+                self.heart_rhythm = HEART_RHYTHM.IRREGULAR
+
+    # def generate_heart_rate(self) -> int:
+    #     self.age
+    #     self.sex
+    #     return 75
+
+
+class HEART_RATE(IntEnum):
+    SLOW = 40  # TODO
+    NORMAL = 75  # TODO
+    RAPID = 120  # TODO
+
+
+
+
 
 class RESPIRATORY_RATE(IntEnum):
     SLOW = 10  # TODO
@@ -76,6 +122,19 @@ class PUPILS(Enum):
 class BLOOD_PRESSURE(Enum):
     NORMAL = "a strong radial pulse"
     WEAK = "no detectable radial pulse"
+
+# Other
+
+
+
+class FREQUENCY(float, Enum):  # perecent, where 1. = 100%
+    RARELY = .2
+    SOMETIMES = .5
+    OFTEN = .8
+    DEFAULT = .9
+    ALWAYS = 1.
+
+
 
 class Symptom(BaseModel):
     """
