@@ -29,6 +29,33 @@ class HEART_RHYTHM(Enum):
     REGULAR = "regular"
     IRREGULAR = "irregular"
 
+class RESPIRATORY_RHYTHM(Enum):
+    REGULAR = "regular"
+    IRREGULAR = "irregular"
+
+class RESPIRATORY_EFFORT(Enum):
+    UNLABORED = "unlabored"
+    LABORED = "labored"
+    SHALLOW = "shallow"
+
+class SKIN_COLOR(Enum):
+    PINK = "pink"
+    PALE = "pale"
+
+class SKIN_TEMPERATURE(Enum):
+    WARM = "warm"
+    COOL = "cool"
+    HOT = "hot"
+
+class SKIN_MOISTURE(Enum):
+    DRY = "dry"
+    WET = "wet"
+    CLAMMY = "clammy"
+
+class PUPILS(Enum):
+    NOT_PERRL = "not equal, round, and reactive to light"
+    PERRL = "equal, round, and reactive to light"
+
 def generate_name() -> str:
     return "Alex"  # TODO
 
@@ -42,15 +69,22 @@ class SuperPatient(BaseModel):
     heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
     heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
     respiratory_rate: int = 0  # Will be set dynamically
-    body_temperature: float = 98.6
+    respiratory_rhythm: RESPIRATORY_RHYTHM = RESPIRATORY_RHYTHM.REGULAR
+    respiratory_effort: RESPIRATORY_EFFORT = RESPIRATORY_EFFORT.UNLABORED
+    skin_color: SKIN_COLOR = SKIN_COLOR.PINK
+    skin_temperature: float = 98.6  # TODO
+    skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
+    body_temperature: float = 98.6  # TODO
+    pulils: PUPILS = PUPILS.PERRL
+    # blood pressure
 
     @model_validator(mode="after")
     def generate_dynamic_values(cls, values):
         """
         Cause I don't a better way, generate the values based on other values here.
         """
-        values.heart_rate = 220 - values.age
-        values.respiratory_rate = 22 - values.age
+        values.heart_rate = 220 - values.age  # function of age, sex
+        values.respiratory_rate = 22 - values.age  # function of age, sex
         return values
 
     def modify_vitals(self, what: str, how: str):
@@ -81,36 +115,16 @@ class RESPIRATORY_RATE(IntEnum):
     NORMAL = 16  # TODO
     RAPID = 25  # TODO
 
-class RESPIRATORY_RHYTHM(Enum):
-    REGULAR = "regular"
-    IRREGULAR = "irregular"
 
-class RESPIRATORY_EFFORT(Enum):
-    UNLABORED = "unlabored"
-    LABORED = "labored"
-    SHALLOW = "shallow"
 
-class SKIN_COLOR(Enum):
-    PINK = "pink"
-    PALE = "pale"
 
-class SKIN_TEMPERATURE(Enum):
-    WARM = "warm"
-    COOL = "cool"
-    HOT = "hot"
-
-class SKIN_MOISTURE(Enum):
-    DRY = "dry"
-    WET = "wet"
-    CLAMMY = "clammy"
 
 class BODY_TEMPERATURE(float, Enum):  # degF
     NORMAL = 98.6
     HOT = 102.0  # TODO
     COLD = 96.0  # TODO
 
-class PUPILS(Enum):
-    PERRL = "equal, round, and reactive to light"
+
 
 class BLOOD_PRESSURE(Enum):
     NORMAL = "a strong radial pulse"
