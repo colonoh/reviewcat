@@ -11,9 +11,6 @@ jobs:
   OnlyTest:
     runs-on: ubuntu-latest
     environment: dev
-    # permissions:
-    #   contents: read
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.12
@@ -26,6 +23,7 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
+    #  TODO: not actually failing
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
