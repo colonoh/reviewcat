@@ -1,6 +1,7 @@
 from enum import Enum, IntEnum
-from random import choice, random, sample, randint
+from random import choice, random, sample, randint, shuffle
 from typing import List, Union
+import yaml
 
 import numpy as np
 from pydantic import BaseModel, Field, model_validator
@@ -104,6 +105,12 @@ class SuperPatient(BaseModel):
     pulils: PUPILS = PUPILS.PERRL
     # TODO: blood pressure
 
+    condition_name: str = None
+    condition_description: str = None
+    condition_symptoms: list[str] = []
+    condition_treatments: list[str] = []
+
+
     @model_validator(mode="after")
     def generate_dynamic_values(cls, values):
         """
@@ -111,6 +118,32 @@ class SuperPatient(BaseModel):
         """
         values.respiratory_rate = 22 - values.age  # TODO: nonsense 
         return values
+
+    def pick_condition(self):
+        # pick a random condition that 
+        with open("src/app/wfr_conditions.yaml", "r") as f:
+            data = yaml.safe_load(f)
+        global_symptoms = data["symptoms"]
+        all_conditions = data["conditions"]
+        names = list(all_conditions.keys())
+        shuffle(names)
+        for name in names:
+            condition = all_conditions[name]
+            # get one that only applies to this (or any) sex
+            if condition["sex"] == self.sex.value or condition["sex"] == SEX.ANY.value:
+                self.condition_name = name
+                self.condition_description = condition["description"]
+                # TODO: only pick some, and don't pick vitals that already have been affected
+                for symptom_name in condition["symptoms"]:
+                    self.condition_symptoms.append(symptom_name)
+                    g = global_symptoms[symptom_name]
+                    for affected, changed in zip(g.get("affects", []), g.get("change", [])):
+                        self.modify_vitals(affected, changed)
+                self.condition_treatments = condition["txs"]
+                return
+        
+        if self.condition_name == None:
+            raise Exception(f"Could not find any matching conditions for {self.sex.name=}")
 
 
     def modify_vitals(self, affects: str, change: str):
@@ -138,6 +171,20 @@ class SuperPatient(BaseModel):
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
                 return
 
+        elif affects == "skin_color":
+            if change == "pale":
+                self.skin_color = SKIN_COLOR.PALE
+                return
+            
+        elif affects == "skin_temperature":
+            if change == "cool":
+                self.skin_temperature *= 0.9  # TODO
+                return
+            
+        elif affects == "skin_moisture":
+            if change == "clammy":
+                self.skin_moisture = SKIN_MOISTURE.CLAMMY
+                return
         raise ValueError(f"Unhandled modification of vitals: {affects=}, {change=}")  # shouldn't get this far
 
 
