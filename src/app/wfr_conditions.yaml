@@ -34,7 +34,7 @@ conditions:
             "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."]
   Shock (early stages):
     description: "The inadequate perfusion of tissue with oxygenated blood, due to a failure of any or all of three basic components of the circulatory system - heart, blood vessels, and blood - to deliver oxygenated blood to the tissues."
-    symptoms: [pale cool clammy skin, rapid pulse, slow pulse, meow]
+    symptoms: [pale cool clammy skin, rapid pulse, slow pulse]
     txs: ["Maintain ABCs - airway, breathing, circulation",
           "Control bleeding, stabilize fractures",
           "Protect patient temperature within normal limits",

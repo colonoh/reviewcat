@@ -65,10 +65,12 @@ class PUPILS(Enum):
 
 def generate_name() -> str:
     unisex_names = [
-        "Alex", "Andy", "Avery", "Blake", "Casey", "Charlie", "Dakota", "Devin", "Drew",
-        "Elliot", "Emery", "Finley", "Frankie", "Harper", "Hayden", "Jamie", "Jordan", "Jules",
-        "Kai", "Kendall", "Lane", "Logan", "Micah", "Morgan", "Parker", "Quinn", "Reese", "Riley",
-        "River", "Robin", "Rowan", "Sage", "Sam", "Skylar", "Taylor", "Tatum", "Toby", "Tyler", "Wren"
+        "Alex", "Andy", "Avery", "Blake", "Casey", "Charlie", "Dakota", 
+        "Devin", "Drew", "Elliot", "Emery", "Finley", "Frankie", "Harper", 
+        "Hayden", "Jamie", "Jordan", "Jules", "Kai", "Kendall", "Lane", 
+        "Logan", "Micah", "Morgan", "Parker", "Quinn", "Reese", "Riley", 
+        "River", "Robin", "Rowan", "Sage", "Sam", "Skylar", "Taylor", "Tatum", 
+        "Toby", "Tyler", "Wren" 
     ]
     return choice(unisex_names)
 
