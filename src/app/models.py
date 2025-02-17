@@ -111,32 +111,32 @@ class SuperPatient(BaseModel):
         return values
 
 
-    def modify_vitals(self, what: str, how: str):
-        if what == "level_of_responsiveness":
-            if how == "decrease":
+    def modify_vitals(self, affects: str, change: str):
+        if affects == "level_of_responsiveness":
+            if change == "decrease":
                 if self.level_of_responsiveness != LEVEL_OF_RESPONSIVENESS.Unresponsive:
                     self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS(self.level_of_responsiveness.value - 1)
                 return
 
-        elif what == "heart_rate":
-            if how == "decrease":
+        elif affects == "heart_rate":
+            if change == "decrease":
                 self.heart_rate *= 0.8
                 return
-            elif how == "increase":
+            elif change == "increase":
                 self.heart_rate *= 1.2
                 return
         
-        elif what == "heart_strength":
-            if how == "set_weak":
+        elif affects == "heart_strength":
+            if change == "set_weak":
                 self.heart_strength = HEART_STRENGTH.WEAK
                 return
         
-        elif what == "heart_rhythm":
-            if how == "set_irregular":
+        elif affects == "heart_rhythm":
+            if change == "set_irregular":
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
                 return
 
-        raise ValueError(f"Unhandled modification of vitals: {what=}, {how=}")  # shouldn't get this far
+        raise ValueError(f"Unhandled modification of vitals: {affects=}, {change=}")  # shouldn't get this far
 
 
 class HEART_RATE(IntEnum):

@@ -1,0 +1,44 @@
+symptoms:
+# general 
+  nausea: 
+    {}
+  discomfort in the neck:
+    {}
+
+
+# heart rate
+  rapid pulse:
+    affects: [heart_rate]
+    change: [increase]
+  slow pulse:
+    affects: [heart_rate]
+    change: [decrease]
+
+
+# skin
+  pale cool clammy skin:
+    affects: [skin_color, skin_temperature, skin_moisture]
+    change: [pale, cool, clammy]
+
+
+# Each symptom needs to correspond to a symptom up above!
+conditions:
+  Angina:
+    description: "Pain from diminished blood flow to the heart."
+    symptoms: [nausea, discomfort in the neck, rapid pulse, pale cool clammy skin]
+    txs: ["Reduce anxiety and activity",
+          "Administer oxygen",
+          "Administer aspirin",
+          "Evacuate"]
+    evacs: ["Evacuate any patient with chest pain that is not clearly musculoskeletal, pulmonary, or gastrointestinal.",
+            "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."]
+  Shock (early stages):
+    description: "The inadequate perfusion of tissue with oxygenated blood, due to a failure of any or all of three basic components of the circulatory system - heart, blood vessels, and blood - to deliver oxygenated blood to the tissues."
+    symptoms: [pale cool clammy skin, rapid pulse, slow pulse, meow]
+    txs: ["Maintain ABCs - airway, breathing, circulation",
+          "Control bleeding, stabilize fractures",
+          "Protect patient temperature within normal limits",
+          "Elevate the legs",
+          "Consider (giving) fluids]"]
+    evacs: ["Evacuate any patient with chest pain that is not clearly musculoskeletal, pulmonary, or gastrointestinal.",
+            "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."]
