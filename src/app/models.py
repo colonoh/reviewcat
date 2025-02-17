@@ -20,7 +20,13 @@ class LEVEL_OF_RESPONSIVENESS(IntEnum):
     AOx3 = 3
     AOx2 = 2
     AOx1 = 1
-    # TODO: V, P, U
+    Verbal = 0
+    Pain = -1
+    Unresponsive = -2
+
+    def __str__(self):
+        return self.name  # e.g. str(LEVEL_OF_RESPONSIVENESS.AOx4) == AOx4
+
 
 class HEART_STRENGTH(Enum):
     WEAK = "weak"
@@ -94,7 +100,7 @@ class SuperPatient(BaseModel):
     skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
     body_temperature: float = 98.6  # TODO
     pulils: PUPILS = PUPILS.PERRL
-    # blood pressure
+    # TODO: blood pressure
 
     @model_validator(mode="after")
     def generate_dynamic_values(cls, values):
@@ -104,37 +110,45 @@ class SuperPatient(BaseModel):
         values.respiratory_rate = 22 - values.age  # TODO: nonsense 
         return values
 
+
     def modify_vitals(self, what: str, how: str):
         if what == "level_of_responsiveness":
-            # TODO: read `how`
             if how == "decrease":
-                # TODO add lower bounds checking
-                self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS(self.level_of_responsiveness - 1)
+                if self.level_of_responsiveness != LEVEL_OF_RESPONSIVENESS.Unresponsive:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS(self.level_of_responsiveness.value - 1)
+                return
+
         elif what == "heart_rate":
             if how == "decrease":
                 self.heart_rate *= 0.8
+                return
             elif how == "increase":
                 self.heart_rate *= 1.2
+                return
+        
         elif what == "heart_strength":
             if how == "set_weak":
                 self.heart_strength = HEART_STRENGTH.WEAK
+                return
+        
         elif what == "heart_rhythm":
             if how == "set_irregular":
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
+                return
+
+        raise ValueError(f"Unhandled modification of vitals: {what=}, {how=}")  # shouldn't get this far
+
 
 class HEART_RATE(IntEnum):
     SLOW = 40  # TODO
     NORMAL = 75  # TODO
     RAPID = 120  # TODO
 
+
 class RESPIRATORY_RATE(IntEnum):
     SLOW = 10  # TODO
     NORMAL = 16  # TODO
     RAPID = 25  # TODO
-
-
-
-
 
 class BODY_TEMPERATURE(float, Enum):  # degF
     NORMAL = 98.6

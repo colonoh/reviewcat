@@ -2,6 +2,23 @@ from app.models import *
 
 
 
+class TestVitals:
+    def test_level_of_responsiveness(self):
+        p = SuperPatient()
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx4
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx3
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.Unresponsive
+        p.modify_vitals("level_of_responsiveness", "decrease")
+        assert p.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.Unresponsive
+        assert str(p.level_of_responsiveness) == "Unresponsive"
+
+
 class TestPatient:
     def test_sex(self):
         c = Condition(name="Dummy",
