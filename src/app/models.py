@@ -1,8 +1,12 @@
 from enum import Enum, IntEnum
-from random import choice, random, sample
+from random import choice, random, sample, randint
 from typing import List, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
+
+
+AGE_LOWER_BOUND = 18
+AGE_UPPER_BOUND = 80
 
 
 class SEX(Enum):
@@ -28,27 +32,26 @@ class HEART_RHYTHM(Enum):
 def generate_name() -> str:
     return "Alex"  # TODO
 
-def generate_age() -> int:
-    return 75  # TODO
-
-def generate_sex() -> SEX:
-    return choice(list(SEX))
-
-
-
 class SuperPatient(BaseModel):
-    name: str = generate_name()
-    age: int = generate_age()
-    sex: SEX = generate_sex()
+    name: str = Field(default_factory=generate_name)
+    age: int = Field(default_factory=lambda: randint(AGE_LOWER_BOUND, AGE_UPPER_BOUND))
+    sex: SEX = Field(default_factory=lambda: choice(list(SEX)))
 
-    # def __init__(self):
-    #     self.heart_rate = self.generate_heart_rate()
-
-    # vitals
     level_of_responsiveness: LEVEL_OF_RESPONSIVENESS = LEVEL_OF_RESPONSIVENESS.AOx4
-    heart_rate: int = 75
+    heart_rate: int = 0  # Will be set dynamically
     heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
     heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
+    respiratory_rate: int = 0  # Will be set dynamically
+    body_temperature: float = 98.6
+
+    @model_validator(mode="after")
+    def generate_dynamic_values(cls, values):
+        """
+        Cause I don't a better way, generate the values based on other values here.
+        """
+        values.heart_rate = 220 - values.age
+        values.respiratory_rate = 22 - values.age
+        return values
 
     def modify_vitals(self, what: str, how: str):
         if what == "level_of_responsiveness":
@@ -68,20 +71,10 @@ class SuperPatient(BaseModel):
             if how == "set_irregular":
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
 
-    # def generate_heart_rate(self) -> int:
-    #     self.age
-    #     self.sex
-    #     return 75
-
-
 class HEART_RATE(IntEnum):
     SLOW = 40  # TODO
     NORMAL = 75  # TODO
     RAPID = 120  # TODO
-
-
-
-
 
 class RESPIRATORY_RATE(IntEnum):
     SLOW = 10  # TODO
