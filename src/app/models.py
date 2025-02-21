@@ -1,187 +1,251 @@
-from enum import Enum, IntEnum
-from random import choice, random, sample
-from typing import List, Union
+from enum import Enum
+from random import choice, random, sample, randint, shuffle
+import yaml
 
-from pydantic import BaseModel
+import numpy as np
+from pydantic import BaseModel, Field, model_validator
+
+
+AGE_LOWER_BOUND = 18
+AGE_UPPER_BOUND = 80
 
 
 class SEX(Enum):
-    ANY = "any"
     FEMALE = "female"
     MALE = "male"
 
-class FREQUENCY(float, Enum):  # perecent, where 1. = 100%
-    RARELY = .2
-    SOMETIMES = .5
-    OFTEN = .8
-    DEFAULT = .9
-    ALWAYS = 1.
+    def __str__(self):
+        return self.value
 
 class LEVEL_OF_RESPONSIVENESS(Enum):
     AOx4 = "A&Ox4"
     AOx3 = "A&Ox3"
     AOx2 = "A&Ox2"
     AOx1 = "A&Ox1"
-    # TODO: V, P, U
+    VERBAL = "verbal"
+    PAIN = "pain"
+    UNRESPONSIVE = "unresponsive"
 
-class HEART_RATE(IntEnum):
-    SLOW = 40  # TODO
-    NORMAL = 75  # TODO
-    RAPID = 120  # TODO
+    def __str__(self):
+        return self.value
 
 class HEART_STRENGTH(Enum):
     WEAK = "weak"
     STRONG = "strong"
 
+    def __str__(self):
+        return self.value
+
 class HEART_RHYTHM(Enum):
     REGULAR = "regular"
     IRREGULAR = "irregular"
 
-class RESPIRATORY_RATE(IntEnum):
-    SLOW = 10  # TODO
-    NORMAL = 16  # TODO
-    RAPID = 25  # TODO
+    def __str__(self):
+        return self.value
+
 
 class RESPIRATORY_RHYTHM(Enum):
     REGULAR = "regular"
     IRREGULAR = "irregular"
+
+    def __str__(self):
+        return self.value
+
 
 class RESPIRATORY_EFFORT(Enum):
     UNLABORED = "unlabored"
     LABORED = "labored"
     SHALLOW = "shallow"
 
+    def __str__(self):
+        return self.value
+
 class SKIN_COLOR(Enum):
     PINK = "pink"
     PALE = "pale"
+
+    def __str__(self):
+        return self.value
 
 class SKIN_TEMPERATURE(Enum):
     WARM = "warm"
     COOL = "cool"
     HOT = "hot"
 
+    def __str__(self):
+        return self.value
+
 class SKIN_MOISTURE(Enum):
     DRY = "dry"
     WET = "wet"
     CLAMMY = "clammy"
 
-class BODY_TEMPERATURE(float, Enum):  # degF
-    NORMAL = 98.6
-    HOT = 102.0  # TODO
-    COLD = 96.0  # TODO
+    def __str__(self):
+        return self.value
 
 class PUPILS(Enum):
+    NOT_PERRL = "not equal, round, and reactive to light"
     PERRL = "equal, round, and reactive to light"
 
-class BLOOD_PRESSURE(Enum):
-    NORMAL = "a strong radial pulse"
-    WEAK = "no detectable radial pulse"
+    def __str__(self):
+        return self.value
 
-class Symptom(BaseModel):
-    """
-    A sign or symptom.  If the symptom has an effect on vitals, the vital it affects should be in `vitals`.  Multiple 
-    items in the `vitals` list are treated as if they are AND-ed together.  
-    """
-    name: str
-    frequency: FREQUENCY = FREQUENCY.DEFAULT  # how often does this symptom occur
-    vitals: List[Union[LEVEL_OF_RESPONSIVENESS, HEART_RATE, HEART_STRENGTH, HEART_RHYTHM, RESPIRATORY_RATE, \
-                       RESPIRATORY_RHYTHM, RESPIRATORY_EFFORT, SKIN_COLOR, SKIN_TEMPERATURE, SKIN_MOISTURE, \
-                       BODY_TEMPERATURE, PUPILS, BLOOD_PRESSURE]] = []
+class DIFFICULTY(Enum):  # difficulty of the quiz
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
 
-class Condition(BaseModel):
+def generate_name() -> str:
+    unisex_names = [
+        "Alex", "Andy", "Avery", "Blake", "Casey", "Charlie", "Dakota", 
+        "Devin", "Drew", "Elliot", "Emery", "Finley", "Frankie", "Harper", 
+        "Hayden", "Jamie", "Jordan", "Jules", "Kai", "Kendall", "Lane", 
+        "Logan", "Micah", "Morgan", "Parker", "Quinn", "Reese", "Riley", 
+        "River", "Robin", "Rowan", "Sage", "Sam", "Skylar", "Taylor", "Tatum", 
+        "Toby", "Tyler", "Wren" 
+    ]
+    return choice(unisex_names)
+
+
+def generate_heart_rate() -> int:
     """
-    A medical condition/disease/ailment.  
+    Not backed by research!!  Picks a value from normal distribution between 60
+    and 100 (bpm).
     """
-    name: str
-    sex: SEX = SEX.ANY  # this condition is limited to this sex
-    description: str
-    symptoms: List[Symptom]
-    treatments: List[str]
-    evacuation_guidelines: List[str]
-    # references: List[str] = []
+    mean = 80  # bpm
+    std_dev = 7.72  # calculated to get 99% of the vaules within 60-100
+    return int(np.random.normal(mean, std_dev))
+
+
+def generate_respiratory_rate() -> int:
+    """
+    Not backed by research!!  Picks a value from normal distribution between 12
+    and 20.
+    """
+    mean = 16
+    std_dev = 2
+    return int(np.random.normal(mean, std_dev))
+
+def decide_if_symptom_chosen(difficulty: DIFFICULTY) -> bool:
+    """
+    Based on the difficulty, return whether or not this symptom is chosen.
+    """
+    if difficulty == DIFFICULTY.HARD:
+        return random() < 0.5
+    elif difficulty == DIFFICULTY.MEDIUM:
+        return random() < 0.75
+    else:
+        return 1.0
 
 
 class Patient(BaseModel):
-    """
-    Starts with vital values representing normal levels.
-    """
-    name: str = "Alex"
-    condition: Condition
-    selected_symptoms: List[Symptom] = []
+    name: str = Field(default_factory=generate_name)
+    age: int = Field(default_factory=lambda: randint(AGE_LOWER_BOUND, AGE_UPPER_BOUND))
+    sex: SEX = Field(default_factory=lambda: choice(list(SEX)))
 
-    # vitals
-    level_of_responsiveness: str = LEVEL_OF_RESPONSIVENESS.AOx4.value
-    heart_rate: int = HEART_RATE.NORMAL.value
-    heart_strength: str = HEART_STRENGTH.STRONG.value
-    heart_rhythm: str = HEART_RHYTHM.REGULAR.value
-    respiratory_rate: int = RESPIRATORY_RATE.NORMAL.value
-    respiratory_rhythm: str = RESPIRATORY_RHYTHM.REGULAR.value
-    respiratory_effort: str = RESPIRATORY_EFFORT.UNLABORED.value
-    skin_color: str = SKIN_COLOR.PINK.value
-    skin_temperature: str = SKIN_TEMPERATURE.WARM.value
-    skin_moisture: str = SKIN_MOISTURE.DRY.value
-    body_temperature: float = BODY_TEMPERATURE.NORMAL.value
-    pupils: str = PUPILS.PERRL.value
-    blood_pressure: str = BLOOD_PRESSURE.NORMAL.value
+    level_of_responsiveness: LEVEL_OF_RESPONSIVENESS = LEVEL_OF_RESPONSIVENESS.AOx4
+    heart_rate: int = Field(default_factory=generate_heart_rate)
+    heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
+    heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
+    respiratory_rate: int = Field(default_factory=generate_respiratory_rate)
+    respiratory_rhythm: RESPIRATORY_RHYTHM = RESPIRATORY_RHYTHM.REGULAR
+    respiratory_effort: RESPIRATORY_EFFORT = RESPIRATORY_EFFORT.UNLABORED
+    skin_color: SKIN_COLOR = SKIN_COLOR.PINK
+    skin_temperature: float = 98.6  # TODO
+    skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
+    body_temperature: float = 98.6  # TODO
+    pupils: PUPILS = PUPILS.PERRL
+    # TODO: blood pressure
 
-    @property
-    def sex(self) -> str:
-        """
-        Use the condition-specific sex or generate a random one if it affects everyone.
-        """
-        return self.condition.sex.value if self.condition.sex != SEX.ANY else choice([SEX.FEMALE.value, SEX.MALE.value])
+    difficulty: DIFFICULTY = DIFFICULTY.MEDIUM
+    condition_name: str = None
+    condition_description: str = None
+    condition_unselected_symptoms: list[str] = []
+    condition_selected_symptoms: list[str] = []
+    condition_treatments: list[str] = []
+    condition_evacuation_guidelines: list[str] = []
 
-    def get_symptoms(self):
-        """
-        Randomly choose some of the symptoms, based on frequency.  Do not pick symptoms with conflicting vital effects.
-        """
-        vitals_to_modify: set[str] = set()
+    def pick_condition(self):
+        # pick a random condition that 
+        with open("wfr_conditions.yaml", "r") as f:
+            data = yaml.safe_load(f)
+        global_symptoms = data["symptoms"]
+        all_conditions = data["conditions"]
+        names = list(all_conditions.keys())
+        shuffle(names)
+        for name in names:
+            condition = all_conditions[name]
+            if not condition.get("sex") or condition.get("sex") == self.sex.value:  # restrict to sex (if applicable)
+                self.condition_name = name
+                self.condition_description = condition["description"]
 
-        # go through the symptoms in a random order so if there are conflicts, the first one doesn't always get picked over the later ones
-        for symptom in sample(self.condition.symptoms, k=len(self.condition.symptoms)):
-            if random() <= symptom.frequency:  # pick a number 0..1, and if it is less than the frequency, select this symptom
-                # check to see if any vitals this symptom has were already modified/conflict e.g. heart rate can't be both rapid AND slow
-                vital_already_modified = False
-                for vital in symptom.vitals:
-                    if type(vital) in vitals_to_modify:  # type being something like HEART_RATE
-                        vital_already_modified = True
-                    else:
-                        vitals_to_modify.add(type(vital))
-                if not vital_already_modified:
-                    self.selected_symptoms.append(symptom)
+                # TODO: ensure at least 1 symptom is chosen (do..while?)
+                for symptom_name in condition["symptoms"]:
+                    if decide_if_symptom_chosen(self.difficulty):  # if this a chosen symptom
+                        self.condition_selected_symptoms.append(symptom_name)
+                        g = global_symptoms[symptom_name]
+                        for affected, changed in zip(g.get("affects", []), g.get("change", [])):
+                            self.modify_vitals(affected, changed)
+                    else:  # wasn't selected
+                        self.condition_unselected_symptoms.append(symptom_name)
 
-    def modify_vitals(self):
-        """
-        For any symptoms given which modify vitals, do the modification.
-        """
-        for symptom in self.selected_symptoms:
-            # overwrite the patient's default vitals with new ones
-            for vital in symptom.vitals:
-                if vital.name in LEVEL_OF_RESPONSIVENESS.__members__:
-                    self.level_of_responsiveness = vital.value
-                elif vital.name in HEART_RATE.__members__:
-                    self.heart_rate = vital.value
-                elif vital.name in HEART_STRENGTH.__members__:
-                    self.heart_strength = vital.value
-                elif vital.name in HEART_RHYTHM.__members__:
-                    self.heart_rhythm = vital.value
-                elif vital.name in RESPIRATORY_RATE.__members__:
-                    self.respiratory_rate = vital.value
-                elif vital.name in RESPIRATORY_RHYTHM.__members__:
-                    self.respiratory_rhythm = vital.value
-                elif vital.name in RESPIRATORY_EFFORT.__members__:
-                    self.respiratory_effort = vital.value
-                elif vital.name in SKIN_COLOR.__members__:
-                    self.skin_color = vital.value
-                elif vital.name in SKIN_TEMPERATURE.__members__:
-                    self.skin_temperature = vital.value
-                elif vital.name in SKIN_MOISTURE.__members__:
-                    self.skin_moisture = vital.value
-                elif vital.name in BODY_TEMPERATURE.__members__:
-                    self.body_temperature = vital.value
-                elif vital.name in PUPILS.__members__:
-                    self.pupils = vital.value
-                elif vital.name in BLOOD_PRESSURE.__members__:
-                    self.blood_pressure = vital.value
-                else:
-                    raise ValueError(f"Don't know what vital {vital.name} is!")
+                self.condition_treatments = condition["txs"]
+                self.condition_evacuation_guidelines = condition["evacs"]
+                
+                return
+        
+        if self.condition_name == None:
+            raise Exception(f"Could not find any matching conditions for {self.sex.name=}")
+
+
+    def modify_vitals(self, affects: str, change: str):
+        if affects == "level_of_responsiveness":
+            if change == "decrease":
+                if self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx4:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.AOx3
+                elif self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx3:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.AOx2
+                elif self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx2:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.AOx1
+                elif self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.AOx1:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.VERBAL
+                elif self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.VERBAL:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.PAIN
+                elif self.level_of_responsiveness == LEVEL_OF_RESPONSIVENESS.PAIN:
+                    self.level_of_responsiveness = LEVEL_OF_RESPONSIVENESS.UNRESPONSIVE
+                return
+
+        elif affects == "heart_rate":
+            if change == "decrease":
+                self.heart_rate = int(self.heart_rate*0.8)  # TODO
+                return
+            elif change == "increase":
+                self.heart_rate = int(self.heart_rate*1.2)  # TODO
+                return
+        
+        elif affects == "heart_strength":
+            if change == "set_weak":
+                self.heart_strength = HEART_STRENGTH.WEAK
+                return
+        
+        elif affects == "heart_rhythm":
+            if change == "set_irregular":
+                self.heart_rhythm = HEART_RHYTHM.IRREGULAR
+                return
+
+        elif affects == "skin_color":
+            if change == "pale":
+                self.skin_color = SKIN_COLOR.PALE
+                return
+            
+        elif affects == "skin_temperature":
+            if change == "cool":
+                self.skin_temperature *= 0.9  # TODO
+                return
+            
+        elif affects == "skin_moisture":
+            if change == "clammy":
+                self.skin_moisture = SKIN_MOISTURE.CLAMMY
+                return
+            
+        raise ValueError(f"Unhandled modification of vitals: {affects=}, {change=}")  # shouldn't get this far
