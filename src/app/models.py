@@ -250,16 +250,3 @@ class SuperPatient(BaseModel):
                 return
             
         raise ValueError(f"Unhandled modification of vitals: {affects=}, {change=}")  # shouldn't get this far
-
-
-class BLOOD_PRESSURE(Enum):
-    NORMAL = "a strong radial pulse"
-    WEAK = "no detectable radial pulse"
-
-
-class FREQUENCY(float, Enum):  # perecent, where 1. = 100%
-    RARELY = .2
-    SOMETIMES = .5
-    OFTEN = .8
-    DEFAULT = .9
-    ALWAYS = 1.
