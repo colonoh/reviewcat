@@ -9,7 +9,7 @@ from models import Patient
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-version = "0.0.2"
+version = "0.0.3"
 
 
 @app.get("/dev/")  # TODO: this is hardcoded to get this to work on AWS Lambda, fix this someday
@@ -20,10 +20,10 @@ def index(request: Request):
     """
     print(f"root_path /dev/: {request.scope.get("root_path")}")
 
-    super_patient = Patient()
-    super_patient.pick_condition()
+    patient = Patient()
+    patient.pick_condition()
 
-    return templates.TemplateResponse(request=request, name="index.html", context={"patient": super_patient, "version": version})
+    return templates.TemplateResponse(request=request, name="index.html", context={"patient": patient, "version": version})
 
 
 handler = Mangum(app)
