@@ -127,6 +127,17 @@ def generate_respiratory_rate() -> int:
     std_dev = 2
     return int(np.random.normal(mean, std_dev))
 
+def decide_if_symptom_chosen(difficulty: DIFFICULTY) -> bool:
+    """
+    Based on the difficulty, return whether or not this symptom is chosen.
+    """
+    if difficulty == DIFFICULTY.HARD:
+        return random() < 0.5
+    elif difficulty == DIFFICULTY.MEDIUM:
+        return random() < 0.75
+    else:
+        return 1.0
+
 
 class SuperPatient(BaseModel):
     name: str = Field(default_factory=generate_name)
@@ -134,7 +145,7 @@ class SuperPatient(BaseModel):
     sex: SEX = Field(default_factory=lambda: choice(list(SEX)))
 
     level_of_responsiveness: LEVEL_OF_RESPONSIVENESS = LEVEL_OF_RESPONSIVENESS.AOx4
-    heart_rate: int = 80 #Field(default_factory=lambda: generate_heart_rate)
+    heart_rate: int = Field(default_factory=generate_heart_rate)
     heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
     heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
     respiratory_rate: int = Field(default_factory=generate_respiratory_rate)
@@ -144,13 +155,14 @@ class SuperPatient(BaseModel):
     skin_temperature: float = 98.6  # TODO
     skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
     body_temperature: float = 98.6  # TODO
-    pulils: PUPILS = PUPILS.PERRL
+    pupils: PUPILS = PUPILS.PERRL
     # TODO: blood pressure
 
-    difficulty: DIFFICULTY = DIFFICULTY.EASY
+    difficulty: DIFFICULTY = DIFFICULTY.MEDIUM
     condition_name: str = None
     condition_description: str = None
-    condition_symptoms: list[str] = []
+    condition_unselected_symptoms: list[str] = []
+    condition_selected_symptoms: list[str] = []
     condition_treatments: list[str] = []
     condition_evacuation_guidelines: list[str] = []
 
@@ -164,18 +176,23 @@ class SuperPatient(BaseModel):
         shuffle(names)
         for name in names:
             condition = all_conditions[name]
-            # get one that only applies to this (or any) sex
-            if not condition.get("sex") or condition.get("sex") == self.sex.value:
+            if not condition.get("sex") or condition.get("sex") == self.sex.value:  # restrict to sex (if applicable)
                 self.condition_name = name
                 self.condition_description = condition["description"]
-                # TODO: only pick some, and don't pick vitals that already have been affected
+
+                # TODO: ensure at least 1 symptom is chosen (do..while?)
                 for symptom_name in condition["symptoms"]:
-                    self.condition_symptoms.append(symptom_name)
-                    g = global_symptoms[symptom_name]
-                    for affected, changed in zip(g.get("affects", []), g.get("change", [])):
-                        self.modify_vitals(affected, changed)
+                    if decide_if_symptom_chosen(self.difficulty):  # if this a chosen symptom
+                        self.condition_selected_symptoms.append(symptom_name)
+                        g = global_symptoms[symptom_name]
+                        for affected, changed in zip(g.get("affects", []), g.get("change", [])):
+                            self.modify_vitals(affected, changed)
+                    else:  # wasn't selected
+                        self.condition_unselected_symptoms.append(symptom_name)
+
                 self.condition_treatments = condition["txs"]
                 self.condition_evacuation_guidelines = condition["evacs"]
+                
                 return
         
         if self.condition_name == None:
@@ -201,10 +218,10 @@ class SuperPatient(BaseModel):
 
         elif affects == "heart_rate":
             if change == "decrease":
-                self.heart_rate = int(self.heart_rate*0.8)
+                self.heart_rate = int(self.heart_rate*0.8)  # TODO
                 return
             elif change == "increase":
-                self.heart_rate = int(self.heart_rate*1.2)
+                self.heart_rate = int(self.heart_rate*1.2)  # TODO
                 return
         
         elif affects == "heart_strength":

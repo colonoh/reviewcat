@@ -29,7 +29,7 @@
       <ul>
         <li>Level of responsiveness: {{ patient.level_of_responsiveness }}</li>
         <li>Heart: {{ patient.heart_rate }} bpm / {{ patient.heart_strength }} / {{ patient.heart_rhythm }}</li>
-        <li>Respiratory: {{ patient.respiratory_rate }} breaths/min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
+        <li>Respiratory: {{ patient.respiratory_rate }} breaths per min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
         <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} / {{ patient.skin_moisture }}</li>
         <li>Body temperature: {{ patient.body_temperature }} &#176;F</li>
         <li>Pupils: {{ patient.pupils }}</li>
@@ -39,17 +39,11 @@
     <div>
       <h2>Symptoms</h2>
       <ul>  
-        <!-- TODO: there's a bug here where vitals which are not selected or still showing "vital signs are hidden" -->
-        <!-- TODO: should move as much logic to the backend as possible so the frontend just shows it -->
-        {% for symptom in patient.condition_symptoms %}
-          <!-- {% if symptom in patient.selected_symptoms and not symptom.vitals %} -->
-            <span><li>{{ symptom.name }}</li></span>
-          <!-- {% elif symptom.vitals %} -->
-            <div class="hidden_info" ><li><span class="special_text" title="Symptoms which affect vital signs are hidden">{{ symptom.name }}</span></li></div>
-          <!-- {% else %} -->
-            <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom.name }}</span></li></div>
-
-          {% endif  %}
+        {% for symptom in patient.condition_selected_symptoms %}
+            <span><li>{{ symptom }}</li></span>
+        {% endfor %}
+        {% for symptom in patient.condition_unselected_symptoms %}
+            <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom }}</span></li></div>
         {% endfor %}
       </ul>
     </div>
