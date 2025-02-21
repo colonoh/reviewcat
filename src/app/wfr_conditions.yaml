@@ -4,6 +4,23 @@ symptoms:
     {}
   discomfort in the neck:
     {}
+  anxiety:
+    {}
+  restlessness:
+    {}
+  thirst:
+    {}
+  fatigue:
+    {}
+  irritability:
+    {}
+  dizziness:
+    {}
+  dark smell urine:
+    {}
+  headache:
+    {}
+
 
 
 # heart rate
@@ -14,6 +31,15 @@ symptoms:
     affects: [heart_rate]
     change: [decrease]
 
+# respiratory_rate
+  rapid breathing:
+    affects: [respiratory_rate]
+    change: [increase]
+
+# respiratory_effort
+  shallow breathing:
+    affects: [respiratory_effort]
+    change: [shallow]
 
 # skin
   pale cool clammy skin:
@@ -25,16 +51,27 @@ symptoms:
 conditions:
   Angina:
     description: "Pain from diminished blood flow to the heart."
-    symptoms: [nausea, discomfort in the neck, rapid pulse, pale cool clammy skin]
+    symptoms: [nausea,
+               discomfort in the neck,
+               rapid pulse,
+               pale cool clammy skin]
     txs: ["Reduce anxiety and activity",
           "Administer oxygen",
           "Administer aspirin",
           "Evacuate"]
-    evacs: ["Evacuate any patient with chest pain that is not clearly musculoskeletal, pulmonary, or gastrointestinal.",
+    evacs: ["Evacuate any patient with chest pain that is not clearly musculoskeletal pulmonary, or gastrointestinal.",
             "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."]
   Shock (early stages):
     description: "The inadequate perfusion of tissue with oxygenated blood, due to a failure of any or all of three basic components of the circulatory system - heart, blood vessels, and blood - to deliver oxygenated blood to the tissues."
-    symptoms: [pale cool clammy skin, rapid pulse, slow pulse]
+    symptoms: [pale cool clammy skin, 
+               rapid pulse, 
+               slow pulse,
+               rapid breathing,
+               shallow breathing,
+               anxiety,
+               restlessness,
+               nausea,
+               thirst]
     txs: ["Maintain ABCs - airway, breathing, circulation",
           "Control bleeding, stabilize fractures",
           "Protect patient temperature within normal limits",
@@ -42,3 +79,16 @@ conditions:
           "Consider (giving) fluids"]
     evacs: ["Evacuate any patient with chest pain that is not clearly musculoskeletal, pulmonary, or gastrointestinal.",
             "Expedite evacuation for any patient with chest pain that does not relieve within 20 minutes."]
+    references: ["NOLS Wilderness Medicine, 6th edition"]
+  Dehydration (mild):
+    description: "Occurs when you use or lose more fluid than you take in, and your body doesn't have enough water and other fluids to carry out its normal functions."
+    symptoms: [thirst, 
+               fatigue, 
+               irritability,
+               dark smell urine,
+               headache,
+               ]
+    txs: ["Drink clear water to replace to replace fluids.",
+          "Electrolyte replacement drinks can help."]
+    # evacs: [""]
+    references: ["NOLS Wilderness Medicine, 6th edition"]

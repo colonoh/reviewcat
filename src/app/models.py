@@ -190,7 +190,7 @@ class Patient(BaseModel):
                         self.condition_unselected_symptoms.append(symptom_name)
 
                 self.condition_treatments = condition["txs"]
-                self.condition_evacuation_guidelines = condition["evacs"]
+                self.condition_evacuation_guidelines = condition.get("evacs", [])
                 
                 return
         
@@ -220,7 +220,7 @@ class Patient(BaseModel):
                 self.heart_rate = int(self.heart_rate*0.8)  # TODO
                 return
             elif change == "increase":
-                self.heart_rate = int(self.heart_rate*1.2)  # TODO
+                self.heart_rate = int(self.heart_rate*1.5)  # TODO
                 return
         
         elif affects == "heart_strength":
@@ -231,6 +231,19 @@ class Patient(BaseModel):
         elif affects == "heart_rhythm":
             if change == "set_irregular":
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
+                return
+
+        elif affects == "respiratory_rate":
+            if change == "decrease":
+                self.respiratory_rate = int(self.respiratory_rate*0.8)  # TODO
+                return
+            elif change == "increase":
+                self.respiratory_rate = int(self.respiratory_rate*1.5)  # TODO
+                return
+
+        elif affects == "respiratory_effort":
+            if change == "shallow":
+                self.respiratory_effort = RESPIRATORY_EFFORT.SHALLOW
                 return
 
         elif affects == "skin_color":
