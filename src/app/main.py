@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from mangum import Mangum # type: ignore
 
-from models import SuperPatient
+from models import Patient
 
 
 app = FastAPI()
@@ -19,11 +19,8 @@ def index(request: Request):
     symptoms, and return that data to the template.
     """
     print(f"root_path /dev/: {request.scope.get("root_path")}")
-    # patient = Patient(condition=choice(conditions))
-    # patient.get_symptoms()
-    # patient.modify_vitals()
 
-    super_patient = SuperPatient()
+    super_patient = Patient()
     super_patient.pick_condition()
 
     return templates.TemplateResponse(request=request, name="index.html", context={"patient": super_patient, "version": version})

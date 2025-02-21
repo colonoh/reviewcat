@@ -1,6 +1,5 @@
-from enum import Enum, IntEnum
+from enum import Enum
 from random import choice, random, sample, randint, shuffle
-from typing import List, Union
 import yaml
 
 import numpy as np
@@ -139,7 +138,7 @@ def decide_if_symptom_chosen(difficulty: DIFFICULTY) -> bool:
         return 1.0
 
 
-class SuperPatient(BaseModel):
+class Patient(BaseModel):
     name: str = Field(default_factory=generate_name)
     age: int = Field(default_factory=lambda: randint(AGE_LOWER_BOUND, AGE_UPPER_BOUND))
     sex: SEX = Field(default_factory=lambda: choice(list(SEX)))
