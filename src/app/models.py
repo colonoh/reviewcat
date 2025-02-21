@@ -118,6 +118,16 @@ def generate_heart_rate() -> int:
     return int(np.random.normal(mean, std_dev))
 
 
+def generate_respiratory_rate() -> int:
+    """
+    Not backed by research!!  Picks a value from normal distribution between 12
+    and 20.
+    """
+    mean = 16
+    std_dev = 2
+    return int(np.random.normal(mean, std_dev))
+
+
 class SuperPatient(BaseModel):
     name: str = Field(default_factory=generate_name)
     age: int = Field(default_factory=lambda: randint(AGE_LOWER_BOUND, AGE_UPPER_BOUND))
@@ -127,7 +137,7 @@ class SuperPatient(BaseModel):
     heart_rate: int = 80 #Field(default_factory=lambda: generate_heart_rate)
     heart_strength: HEART_STRENGTH = HEART_STRENGTH.STRONG
     heart_rhythm: HEART_RHYTHM = HEART_RHYTHM.REGULAR
-    respiratory_rate: int = 0  # Will be set dynamically
+    respiratory_rate: int = Field(default_factory=generate_respiratory_rate)
     respiratory_rhythm: RESPIRATORY_RHYTHM = RESPIRATORY_RHYTHM.REGULAR
     respiratory_effort: RESPIRATORY_EFFORT = RESPIRATORY_EFFORT.UNLABORED
     skin_color: SKIN_COLOR = SKIN_COLOR.PINK
@@ -143,15 +153,6 @@ class SuperPatient(BaseModel):
     condition_symptoms: list[str] = []
     condition_treatments: list[str] = []
     condition_evacuation_guidelines: list[str] = []
-
-
-    @model_validator(mode="after")
-    def generate_dynamic_values(cls, values):
-        """
-        Cause I don't a better way, generate the values based on other values here.
-        """
-        values.respiratory_rate = 22 - values.age  # TODO: nonsense 
-        return values
 
     def pick_condition(self):
         # pick a random condition that 
