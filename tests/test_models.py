@@ -42,11 +42,11 @@ class TestPatient:
     def test_heart_strength(self):
         v = Patient()
         assert v.heart_strength == HEART_STRENGTH.STRONG
-        v.modify_vitals("heart_strength", "set_weak")
+        v.modify_vitals("heart_strength", "weak")
         assert v.heart_strength == HEART_STRENGTH.WEAK
 
     def test_heart_rhythm(self):
         v = Patient()
         assert v.heart_rhythm == HEART_RHYTHM.REGULAR
-        v.modify_vitals("heart_rhythm", "set_irregular")
+        v.modify_vitals("heart_rhythm", "irregular")
         assert v.heart_rhythm == HEART_RHYTHM.IRREGULAR

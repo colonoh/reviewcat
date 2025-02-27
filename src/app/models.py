@@ -224,12 +224,12 @@ class Patient(BaseModel):
                 return
         
         elif affects == "heart_strength":
-            if change == "set_weak":
+            if change == "weak":
                 self.heart_strength = HEART_STRENGTH.WEAK
                 return
         
         elif affects == "heart_rhythm":
-            if change == "set_irregular":
+            if change == "irregular":
                 self.heart_rhythm = HEART_RHYTHM.IRREGULAR
                 return
 

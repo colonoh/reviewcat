@@ -31,6 +31,16 @@ symptoms:
     affects: [heart_rate]
     change: [decrease]
 
+# heart strength
+  weak pulse:
+    affects: [heart_strength]
+    change: [weak]
+
+# heart rhythm
+  irregular pulse:
+    affects: [heart_rhythm]
+    change: [irregular]
+
 # respiratory_rate
   rapid breathing:
     affects: [respiratory_rate]
@@ -66,6 +76,8 @@ conditions:
     symptoms: [pale cool clammy skin, 
                rapid pulse, 
                slow pulse,
+               weak pulse,
+               irregular pulse,
                rapid breathing,
                shallow breathing,
                anxiety,
