@@ -20,8 +20,16 @@ symptoms:
     {}
   headache:
     {}
-
-
+  point tenderness over ribs:
+    {}
+  pain on inhalation:
+    {}
+  coughing:
+    {}
+  # should this be a respiratory_XXX?
+  shortness of breath during exertion:
+    {}
+  
 
 # heart rate
   rapid pulse:
@@ -103,4 +111,16 @@ conditions:
     txs: ["Drink clear water to replace to replace fluids.",
           "Electrolyte replacement drinks can help."]
     # evacs: [""]
+    references: ["NOLS Wilderness Medicine, 6th edition"]
+  Rib fracture:
+    description: "Broken rib."
+    symptoms: [point tenderness over ribs, 
+               pain on inhalation, 
+               shallow breathing,
+               coughing,
+               shortness of breath during exertion,
+               ]
+    txs: ["Tape the fracture site.",
+          "Slong and swathe."]
+    evacs: ["The simple rib fracture does not necessarily need to be evacuated unless the patient is uncomfortable with pain, unable to travel, or short of breath."]
     references: ["NOLS Wilderness Medicine, 6th edition"]
