@@ -18,10 +18,10 @@ class SEX(Enum):
         return self.value
 
 class LEVEL_OF_RESPONSIVENESS(Enum):
-    AOx4 = "A&Ox4"
-    AOx3 = "A&Ox3"
-    AOx2 = "A&Ox2"
-    AOx1 = "A&Ox1"
+    AOx4 = "A&O x4"
+    AOx3 = "A&O x3"
+    AOx2 = "A&O x2"
+    AOx1 = "A&O x1"
     VERBAL = "verbal"
     PAIN = "pain"
     UNRESPONSIVE = "unresponsive"
@@ -84,8 +84,8 @@ class SKIN_MOISTURE(Enum):
         return self.value
 
 class PUPILS(Enum):
-    NOT_PERRL = "not equal, round, and reactive to light"
-    PERRL = "equal, round, and reactive to light"
+    NOT_PERRL = "not equal, round, reactive to light"
+    PERRL = "equal, round, reactive to light"
 
     def __str__(self):
         return self.value
