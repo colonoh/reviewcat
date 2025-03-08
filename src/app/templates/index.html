@@ -19,9 +19,7 @@
   <body>
     <h1>WFR Review!</h1>
 
-    <button onclick="myFunction()">Reveal</button> <button onclick="window.location.reload()">Give me a new patient</button>
-
-    <!-- TODO: grey out button after use -->
+    <button id="revealButton" onclick="myFunction()">Reveal</button> <button onclick="window.location.reload()">Give me a new patient</button>
 
     <p>You have a {{patient.age}} year old {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition_name }}</strong>: {{ patient.condition_description }}</p>
     <div>
@@ -69,10 +67,13 @@
 
     <script>
       function myFunction() {
+        // hide the button
+        document.getElementById("revealButton").disabled = true;
+
+        // unhide everything that has the class `hidden_info`
         const collection = document.getElementsByClassName("hidden_info");
-        // TODO: use for/of instead
-        for (let i = 0; i < collection.length; i++) {
-        collection[i].style.display = "block";
+        for (let item of collection) {
+            item.style.display = "block";
         }
       }
     </script>
