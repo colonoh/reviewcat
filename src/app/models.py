@@ -198,12 +198,12 @@ class Patient(BaseModel):
                 for symptom_name in condition["symptoms"]:
                     g = global_symptoms[symptom_name]
                     if not set(g.get("affects", [])).isdisjoint(affected_vitals):  # if any of this's symptom's vitals are already affected
+                        self.condition_unselected_symptoms.append(symptom_name)
                         continue
 
                     # if we haven't selected at least a certain amount of symptoms, keep selecting them
-                    ratio_of_symptoms_selected = len(self.condition_selected_symptoms)/len(condition["symptoms"])
+                    ratio_of_symptoms_selected = (len(self.condition_selected_symptoms) + len(self.condition_hidden_symptoms)) / len(condition["symptoms"])
                     if ratio_of_symptoms_selected <= self.difficulty_percentage():
-                        
                         if g.get("affects"):  # if it affects the vitals (e.g. "rapid heart rate)
                             self.condition_hidden_symptoms.append(symptom_name)
                             for affected, changed in zip(g.get("affects", []), g.get("change", [])):
