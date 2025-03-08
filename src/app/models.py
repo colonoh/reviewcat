@@ -126,17 +126,6 @@ def generate_respiratory_rate() -> int:
     std_dev = 2
     return int(np.random.normal(mean, std_dev))
 
-def decide_if_symptom_chosen(difficulty: DIFFICULTY) -> bool:
-    """
-    Based on the difficulty, return whether or not this symptom is chosen.
-    """
-    if difficulty == DIFFICULTY.HARD:
-        return random() < 0.5
-    elif difficulty == DIFFICULTY.MEDIUM:
-        return random() < 0.75
-    else:
-        return 1.0
-
 
 class Patient(BaseModel):
     name: str = Field(default_factory=generate_name)
@@ -179,14 +168,22 @@ class Patient(BaseModel):
                 self.condition_name = name
                 self.condition_description = condition["description"]
 
-                # TODO: ensure at least 1 symptom is chosen (do..while?)
+                affected_vitals = set()
+                shuffle(condition["symptoms"])  # randomize the conditions
                 for symptom_name in condition["symptoms"]:
-                    if decide_if_symptom_chosen(self.difficulty):  # if this a chosen symptom
+                    g = global_symptoms[symptom_name]
+                    if not set(g.get("affects", [])).isdisjoint(affected_vitals):  # if any of this's symptom's vitals are already affected
+                        continue
+
+                    # if we haven't selected at least a certain amount of symptoms, keep selecting them
+                    ratio_of_symptoms_selected = len(self.condition_selected_symptoms)/len(condition["symptoms"])
+                    if ratio_of_symptoms_selected <= self.difficulty_percentage():
                         self.condition_selected_symptoms.append(symptom_name)
-                        g = global_symptoms[symptom_name]
                         for affected, changed in zip(g.get("affects", []), g.get("change", [])):
                             self.modify_vitals(affected, changed)
-                    else:  # wasn't selected
+                            affected_vitals.add(affected)
+                    
+                    else:  # we have enough, this one wasn't selected
                         self.condition_unselected_symptoms.append(symptom_name)
 
                 self.condition_treatments = condition["txs"]
@@ -262,3 +259,12 @@ class Patient(BaseModel):
                 return
             
         raise ValueError(f"Unhandled modification of vitals: {affects=}, {change=}")  # shouldn't get this far
+
+
+    def difficulty_percentage(self) -> float:
+        if self.difficulty == DIFFICULTY.HARD:
+            return 0.5
+        elif self.difficulty == DIFFICULTY.MEDIUM:
+            return 0.75
+        else:
+            return 1.0
