@@ -3,18 +3,7 @@
 <html lang="en">
   <head>
     <title>WFR Review</title>
-    <style>
-      .hidden_info {
-        display: none;
-      }
-
-      .special_text {
-        border-bottom: 1px dotted black;
-        cursor: help;
-        display: inline
-      }
-    </style>
-
+    <link href="{{ url_for('static', path='/basic.css') }}" rel="stylesheet">
   </head>
   <body>
     <h1>WFR Review!</h1>
@@ -38,13 +27,13 @@
       <h2>Symptoms</h2>
       <ul>  
         {% for symptom in patient.condition_selected_symptoms %}
-            <span><li>{{ symptom }}</li></span>
+            <li>{{ symptom }}</li>
         {% endfor %}
         {% for symptom in patient.condition_hidden_symptoms %}
-            <div class="hidden_info"><li><span class="special_text" title="This symptom was present but hidden because its effect was shown via a change in the patient's vital signs.">{{ symptom }}</span></li></div>
+            <li class="hidden_info"><span class="special_text" title="This symptom was present but hidden because its effect was shown via a change in the patient's vital signs.">{{ symptom }}</span></li>
         {% endfor %}
         {% for symptom in patient.condition_unselected_symptoms %}
-            <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom }}</span></li></div>
+            <li class="hidden_info"><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom }}</span></li>
         {% endfor %}
       </ul>
     </div>
@@ -73,7 +62,7 @@
         // unhide everything that has the class `hidden_info`
         const collection = document.getElementsByClassName("hidden_info");
         for (let item of collection) {
-            item.style.display = "block";
+            item.style.visibility = "visible";
         }
       }
     </script>
