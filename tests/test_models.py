@@ -1,6 +1,10 @@
 from app.models import *
 
 
+# TODO: test already affected vital not selected
+# TODO: test correct number of vitals selected (based on difficulty)
+# TODO: test that symptoms which affect vitals are marked as hidden symptoms
+
 class TestVitals:
     def test_level_of_responsiveness(self):
         p = Patient()

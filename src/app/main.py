@@ -9,7 +9,7 @@ from models import Patient
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
-version = "0.0.3"
+version = "0.0.4"
 
 
 @app.get("/dev/")  # TODO: this is hardcoded to get this to work on AWS Lambda, fix this someday

@@ -2,7 +2,7 @@
 <!-- Version {{version}} -->
 <html lang="en">
   <head>
-    <title>WFR Review (Hi Karen)</title>
+    <title>WFR Review</title>
     <style>
       .hidden_info {
         display: none;
@@ -41,6 +41,9 @@
       <ul>  
         {% for symptom in patient.condition_selected_symptoms %}
             <span><li>{{ symptom }}</li></span>
+        {% endfor %}
+        {% for symptom in patient.condition_hidden_symptoms %}
+            <div class="hidden_info"><li><span class="special_text" title="This symptom was present but hidden because its effect was shown via a change in the patient's vital signs.">{{ symptom }}</span></li></div>
         {% endfor %}
         {% for symptom in patient.condition_unselected_symptoms %}
             <div class="hidden_info"><li><span class="special_text" title="This symptom was not present in this particular patient">{{ symptom }}</span></li></div>

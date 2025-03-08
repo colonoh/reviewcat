@@ -149,8 +149,10 @@ class Patient(BaseModel):
     difficulty: DIFFICULTY = DIFFICULTY.MEDIUM
     condition_name: str = None
     condition_description: str = None
-    condition_unselected_symptoms: list[str] = []
-    condition_selected_symptoms: list[str] = []
+    condition_selected_symptoms: list[str] = []  # symptoms we show the user
+    condition_hidden_symptoms: list[str] = []  # symptoms that affect the patient but are hidden from the user
+    condition_unselected_symptoms: list[str] = []  # symptoms that do not affect the patient
+
     condition_treatments: list[str] = []
     condition_evacuation_guidelines: list[str] = []
 
@@ -178,11 +180,15 @@ class Patient(BaseModel):
                     # if we haven't selected at least a certain amount of symptoms, keep selecting them
                     ratio_of_symptoms_selected = len(self.condition_selected_symptoms)/len(condition["symptoms"])
                     if ratio_of_symptoms_selected <= self.difficulty_percentage():
-                        self.condition_selected_symptoms.append(symptom_name)
-                        for affected, changed in zip(g.get("affects", []), g.get("change", [])):
-                            self.modify_vitals(affected, changed)
-                            affected_vitals.add(affected)
-                    
+                        
+                        if g.get("affects"):  # if it affects the vitals (e.g. "rapid heart rate)
+                            self.condition_hidden_symptoms.append(symptom_name)
+                            for affected, changed in zip(g.get("affects", []), g.get("change", [])):
+                                self.modify_vitals(affected, changed)
+                                affected_vitals.add(affected)
+                        else:  # doesn't affect vitals (e.g. "discomfort in the neck")
+                            self.condition_selected_symptoms.append(symptom_name)
+
                     else:  # we have enough, this one wasn't selected
                         self.condition_unselected_symptoms.append(symptom_name)
 
