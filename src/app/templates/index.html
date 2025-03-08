@@ -23,15 +23,15 @@
 
     <!-- TODO: grey out button after use -->
 
-    <p>You have a {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition_name }}</strong>: {{ patient.condition_description }}</p>
+    <p>You have a {{patient.age}} year old {{ patient.sex }} patient named {{ patient.name }}.</p> <p class="hidden_info">They have <strong>{{ patient.condition_name }}</strong>: {{ patient.condition_description }}</p>
     <div>
       <h2>Vitals</h2>
       <ul>
         <li>Level of responsiveness: {{ patient.level_of_responsiveness }}</li>
         <li>Heart: {{ patient.heart_rate }} bpm / {{ patient.heart_strength }} / {{ patient.heart_rhythm }}</li>
         <li>Respiratory: {{ patient.respiratory_rate }} breaths per min / {{ patient.respiratory_rhythm }} rhythm / {{ patient.respiratory_effort }}</li>
-        <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} &#176;F / {{ patient.skin_moisture }}</li>
-        <li>Body temperature: {{ patient.body_temperature }} &#176;F</li>
+        <li>Skin: {{ patient.skin_color }} / {{ patient.skin_temperature }} / {{ patient.skin_moisture }}</li>
+        <li>Temperature: {{ patient.body_temperature|round(1) }} &#176;F</li>
         <li>Pupils: {{ patient.pupils }}</li>
         <li>Blood pressure: {{ patient.blood_pressure }}</li>
       </ul>

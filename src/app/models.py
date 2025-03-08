@@ -1,5 +1,5 @@
 from enum import Enum
-from random import choice, random, sample, randint, shuffle
+from random import choice, random, sample, randint, shuffle, uniform
 import yaml
 
 import numpy as np
@@ -127,6 +127,20 @@ def generate_respiratory_rate() -> int:
     return int(np.random.normal(mean, std_dev))
 
 
+def generate_body_temperature(age: int, sex: SEX) -> float:
+    """
+    Temporarily using this formula from ChatGPT, which uses the following supposedly:
+    - Mackowiak, P. A., Wasserman, S. S., & Levine, M. M. (1992). A critical appraisal of 98.6°F, the upper limit of 
+      the normal body temperature, and other legacies of Carl Reinhold August Wunderlich. JAMA, 268(12), 1578-1580.
+    - Sund-Levander, M., Forsberg, C., & Wahren, L. K. (2002). Normal oral, rectal, tympanic, and axillary body 
+      temperature in adult men and women: A systematic literature review. Scandinavian Journal of Caring Sciences, 
+      16(2), 122-128.
+    """
+    S = 0 if sex == SEX.MALE else 1  # apparently females are warmer
+    eps = uniform(0, 0.5)  # randomness
+    return 98.2 - (0.02 * age) + (0.3 * S) + eps
+
+
 class Patient(BaseModel):
     name: str = Field(default_factory=generate_name)
     age: int = Field(default_factory=lambda: randint(AGE_LOWER_BOUND, AGE_UPPER_BOUND))
@@ -140,9 +154,9 @@ class Patient(BaseModel):
     respiratory_rhythm: RESPIRATORY_RHYTHM = RESPIRATORY_RHYTHM.REGULAR
     respiratory_effort: RESPIRATORY_EFFORT = RESPIRATORY_EFFORT.UNLABORED
     skin_color: SKIN_COLOR = SKIN_COLOR.PINK
-    skin_temperature: float = 98.6  # TODO
+    body_temperature: float = None  # replaced in generate_dynamic_values()
     skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
-    body_temperature: float = 98.6  # TODO
+    skin_temperature: SKIN_TEMPERATURE = SKIN_TEMPERATURE.WARM
     pupils: PUPILS = PUPILS.PERRL
     # TODO: blood pressure
 
@@ -155,6 +169,15 @@ class Patient(BaseModel):
 
     condition_treatments: list[str] = []
     condition_evacuation_guidelines: list[str] = []
+
+    @model_validator(mode="after")
+    def generate_dynamic_values(cls, values):
+        """
+        Cause I don't a better way, generate the values based on other values here.
+        """
+        values.body_temperature = generate_body_temperature(values.age, values.sex)
+        return values
+
 
     def pick_condition(self):
         # pick a random condition that 
@@ -256,7 +279,7 @@ class Patient(BaseModel):
             
         elif affects == "skin_temperature":
             if change == "cool":
-                self.skin_temperature *= 0.9  # TODO
+                self.skin_temperature = SKIN_TEMPERATURE.COOL
                 return
             
         elif affects == "skin_moisture":
