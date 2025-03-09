@@ -90,6 +90,13 @@ class PUPILS(Enum):
     def __str__(self):
         return self.value
 
+class BLOOD_PRESSURE(Enum):
+    NO_RADIAL_PULSE = "no radial pulse present"
+    RADIAL_PULSE = "radial pulse present"
+
+    def __str__(self):
+        return self.value       
+
 class DIFFICULTY(Enum):  # difficulty of the quiz
     EASY = "easy"
     MEDIUM = "medium"
@@ -158,7 +165,7 @@ class Patient(BaseModel):
     skin_moisture: SKIN_MOISTURE = SKIN_MOISTURE.DRY
     skin_temperature: SKIN_TEMPERATURE = SKIN_TEMPERATURE.WARM
     pupils: PUPILS = PUPILS.PERRL
-    # TODO: blood pressure
+    blood_pressure: BLOOD_PRESSURE = BLOOD_PRESSURE.RADIAL_PULSE
 
     difficulty: DIFFICULTY = DIFFICULTY.MEDIUM
     condition_name: str = None
